@@ -6,7 +6,7 @@ require APPPATH . '/libraries/REST_Controller.php';
 
 use Restserver\Libraries\REST_Controller;
 
-class PemasokController extends REST_Controller
+class SatuanController extends REST_Controller
 {
 
     function __construct($config = 'rest')
@@ -32,8 +32,8 @@ class PemasokController extends REST_Controller
     function index_post()
     {
         $data = array(
-            'id_satuan'     => $this->post('id_satuan'),
-            'nama_satuan'   => $this->post('nama_satuan')
+            'id_satuan'    => $this->post('id_satuan'),
+            'nama_satuan'  => $this->post('nama_satuan')
         );
         $insert = $this->db->insert('satuan', $data);
         if ($insert) {
@@ -48,8 +48,8 @@ class PemasokController extends REST_Controller
     {
         $id = $this->put('id_satuan');
         $data = array(
-            'id_satuan'     => $this->put('id_satuan'),
-            'nama_satuan'   => $this->put('nama_satuan')
+            'id_satuan'    => $this->put('id_satuan'),
+            'nama_satuan'  => $this->put('nama_satuan')
         );
         $this->db->where('id_satuan', $id);
         $update = $this->db->update('satuan', $data);

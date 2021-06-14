@@ -25,7 +25,6 @@ class PemasokController extends REST_Controller
             $this->db->where('id', $id);
             $tokodita = $this->db->get('pemasok')->result();
         }
-        var_dump($tokodita);
         $this->response($tokodita, 200);
     }
 
@@ -33,11 +32,11 @@ class PemasokController extends REST_Controller
     function index_post()
     {
         $data = array(
-            'id_pemasok'     => $this->post('id_pemasok'),
-            'nama_pemasok'   => $this->post('nama_pemasok'),
-            'alamat'     => $this->post('alamat'),
-            'kota'    => $this->post('kota'),
-            'telepon'   => $this->post('telepon')
+            'id_pemasok'    => $this->post('id_pemasok'),
+            'nama_pemasok'  => $this->post('nama_pemasok'),
+            'alamat'        => $this->post('alamat'),
+            'kota'          => $this->post('kota'),
+            'telepon'       => $this->post('telepon')
         );
         $insert = $this->db->insert('pemasok', $data);
         if ($insert) {
@@ -54,9 +53,9 @@ class PemasokController extends REST_Controller
         $data = array(
             'id_pemasok'     => $this->put('id_pemasok'),
             'nama_pemasok'   => $this->put('nama_pemasok'),
-            'alamat'     => $this->put('alamat'),
-            'kota'    => $this->put('kota'),
-            'telepon'   => $this->put('telepon')
+            'alamat'         => $this->put('alamat'),
+            'kota'           => $this->put('kota'),
+            'telepon'        => $this->put('telepon')
         );
         $this->db->where('id_pemasok', $id);
         $update = $this->db->update('pemasok', $data);

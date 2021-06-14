@@ -6,7 +6,7 @@ require APPPATH . '/libraries/REST_Controller.php';
 
 use Restserver\Libraries\REST_Controller;
 
-class PemasokController extends REST_Controller
+class LoginController extends REST_Controller
 {
 
     function __construct($config = 'rest')
@@ -31,31 +31,45 @@ class PemasokController extends REST_Controller
     //mengirim atau menambah data user
     function index_post()
     {
-        $data = array(
-            'id_user'     => $this->post('id_user'),
-            'username'   => $this->post('username'),
-            'email'   => $this->post('email'),
-            'password'   => $this->post('password'),
-            'level'   => $this->post('level')
-        );
-        $insert = $this->db->insert('user', $data);
-        if ($insert) {
-            $this->response($data, 200);
-        } else {
+        $this->load->helper(array('form', 'url'));
+
+        $this->load->library('form_validation');
+
+        $this->form_validation->set_rules('username', 'Username', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'required');
+        $this->form_validation->set_rules('password', 'Password', 'required', array('required' => 'You must provide a %s.'));
+        $this->form_validation->set_rules('level', 'Level', 'required');
+
+
+        if ($this->form_validation->run() == FALSE) {
             $this->response(array('status' => 'fail', 502));
+        } else {
+            $data = array(
+                'id_user'    => $this->post('id_user'),
+                'username'   => $this->post('username'),
+                'email'      => $this->post('email'),
+                'password'   => $this->post('password'),
+                'level'      => $this->post('level')
+            );
+            $insert = $this->db->insert('user', $data);
+            if ($insert) {
+                $this->response($data, 200);
+            } else {
+                $this->response(array('status' => 'fail', 502));
+            }
         }
     }
 
-    //memperbarui data master user
+    //memperbarui data user
     function index_put()
     {
         $id = $this->put('id_user');
         $data = array(
-            'id_user'     => $this->put('id_user'),
+            'id_user'    => $this->put('id_user'),
             'username'   => $this->put('username'),
-            'email'   => $this->put('email'),
+            'email'      => $this->put('email'),
             'password'   => $this->put('password'),
-            'level'   => $this->put('level')
+            'level'      => $this->put('level')
         );
         $this->db->where('id_user', $id);
         $update = $this->db->update('login', $data);
@@ -81,5 +95,8 @@ class PemasokController extends REST_Controller
 
 
     //Masukan function selanjutnya disini
+
+
+
 
 }
