@@ -42,7 +42,7 @@ class LoginController extends REST_Controller
 
 
         if ($this->form_validation->run() == FALSE) {
-            $this->response(array('status' => 'fail', 502));
+            $this->response(array('status' => 'fail, isi sesuai format', 502));
         } else {
             $data = array(
                 'id_user'    => $this->post('id_user'),
@@ -63,20 +63,33 @@ class LoginController extends REST_Controller
     //memperbarui data user
     function index_put()
     {
-        $id = $this->put('id_user');
-        $data = array(
-            'id_user'    => $this->put('id_user'),
-            'username'   => $this->put('username'),
-            'email'      => $this->put('email'),
-            'password'   => $this->put('password'),
-            'level'      => $this->put('level')
-        );
-        $this->db->where('id_user', $id);
-        $update = $this->db->update('login', $data);
-        if ($update) {
-            $this->response($data, 200);
+        $this->load->helper(array('form', 'url'));
+
+        $this->load->library('form_validation');
+
+        $this->form_validation->set_rules('username', 'Username', 'required');
+        $this->form_validation->set_rules('email', 'Email', 'required');
+        $this->form_validation->set_rules('password', 'Password', 'required', array('required' => 'You must provide a %s.'));
+        $this->form_validation->set_rules('level', 'Level', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->response(array('status' => 'fail, isi sesuai format', 502));
         } else {
-            $this->response(array('status' => 'fail', 502));
+            $id = $this->put('id_user');
+            $data = array(
+                'id_user'    => $this->put('id_user'),
+                'username'   => $this->put('username'),
+                'email'      => $this->put('email'),
+                'password'   => $this->put('password'),
+                'level'      => $this->put('level')
+            );
+            $this->db->where('id_user', $id);
+            $update = $this->db->update('login', $data);
+            if ($update) {
+                $this->response($data, 200);
+            } else {
+                $this->response(array('status' => 'fail', 502));
+            }
         }
     }
 
@@ -95,8 +108,5 @@ class LoginController extends REST_Controller
 
 
     //Masukan function selanjutnya disini
-
-
-
 
 }
