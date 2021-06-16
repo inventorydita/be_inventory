@@ -99,18 +99,16 @@ class PenjualanController extends REST_Controller
     //menghapus salah satu data penjualan
     function index_delete()
     {
-         {
-            $id = $this->delete('id_penjualan');
-            $this->db->where('id_penjualan', $id);
-            $delete = $this->db->delete('penjualan');
-            if ($delete) {
-                $this->response(array('status' => 'success'), 201);
-            } else {
-                $this->response(array('status' => 'fail', 502));
-            }
+        $id = $this->delete('id_penjualan');
+        $this->db->where('id_penjualan', $id);
+        $delete = $this->db->delete('penjualan');
+        if ($delete) {
+            $this->response(array('status' => 'success'), 201);
+        } else {
+            $this->response(array('status' => 'fail', 502));
+        }
     }
 
 
     //Masukan function selanjutnya disini
-
 }
