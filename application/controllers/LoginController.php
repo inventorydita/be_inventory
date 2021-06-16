@@ -32,7 +32,6 @@ class LoginController extends REST_Controller
     function index_post()
     {
         $this->load->helper(array('form', 'url'));
-
         $this->load->library('form_validation');
 
         $this->form_validation->set_rules('username', 'Username', 'required');
@@ -51,7 +50,7 @@ class LoginController extends REST_Controller
                 'password'   => $this->post('password'),
                 'level'      => $this->post('level')
             );
-            $insert = $this->db->insert('user', $data);
+            $insert = $this->db->insert('login', $data);
             if ($insert) {
                 $this->response($data, 200);
             } else {
@@ -69,7 +68,7 @@ class LoginController extends REST_Controller
 
         $this->form_validation->set_rules('username', 'Username', 'required');
         $this->form_validation->set_rules('email', 'Email', 'required');
-        $this->form_validation->set_rules('password', 'Password', 'required', array('required' => 'You must provide a %s.'));
+        $this->form_validation->set_rules('password', 'Password', 'required');
         $this->form_validation->set_rules('level', 'Level', 'required');
 
         if ($this->form_validation->run() == FALSE) {

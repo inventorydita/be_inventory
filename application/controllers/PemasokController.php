@@ -38,7 +38,6 @@ class PemasokController extends REST_Controller
         $this->form_validation->set_rules('alamat', 'Alamat', 'required');
         $this->form_validation->set_rules('kota', 'Kota', 'required');
         $this->form_validation->set_rules('telepon', 'Telepon', 'required');
-        $this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->response(array('status' => 'fail,isi sesuai format', 502));
@@ -69,7 +68,6 @@ class PemasokController extends REST_Controller
         $this->form_validation->set_rules('alamat', 'Alamat', 'required');
         $this->form_validation->set_rules('kota', 'Kota', 'required');
         $this->form_validation->set_rules('telepon', 'Telepon', 'required');
-        $this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->response(array('status' => 'fail,isi sesuai format', 502));
