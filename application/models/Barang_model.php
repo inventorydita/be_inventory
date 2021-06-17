@@ -13,9 +13,16 @@ class MasterBarang extends CI_Model
         parent::__construct();
     }
 
+    function 
+    $this->db->select('*');
+    $this->db->from('barang');
+    $this->db->join
+
     //untuk insert data
     function insert($data)
     {
         $this->db->insert($this->table, $data);
     }
+
+
 }
