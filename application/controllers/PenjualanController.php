@@ -13,6 +13,7 @@ class PenjualanController extends REST_Controller
     {
         parent::__construct($config);
         $this->load->database();
+        $this->load->model('Penjualan_model', 'penjualan');
     }
 
     //Menampilkan data penjualan
@@ -20,7 +21,7 @@ class PenjualanController extends REST_Controller
     {
         $id = $this->get('id_penjualan');
         if ($id == '') {
-            $tokodita = $this->db->get('penjualan')->result();
+            $tokodita = $this->db->get_all()->result();
         } else {
             $this->db->where('id', $id);
             $tokodita = $this->db->get('penjualan')->result();
@@ -52,7 +53,7 @@ class PenjualanController extends REST_Controller
                 'subtotal'     => $this->post('subtotal'),
                 'tanggal'      => $this->post('tanggal')
             );
-            $insert = $this->db->insert('penjualan', $data);
+            $insert = $this->penjualan->post($data);
             if ($insert) {
                 $this->response($data, 200);
             } else {
@@ -86,9 +87,8 @@ class PenjualanController extends REST_Controller
             'subtotal'     => $this->put('subtotal'),
             'tanggal'      => $this->put('tanggal')
         );
-        $this->db->where('id_penjualan', $id);
-        $update = $this->db->update('penjualan', $data);
-        if ($update) {
+        $put = $this->penjualan->put($data . $id);
+        if ($put) {
             $this->response($data, 200);
         } else {
             $this->response(array('status' => 'fail', 502));
@@ -101,7 +101,7 @@ class PenjualanController extends REST_Controller
     {
         $id = $this->delete('id_penjualan');
         $this->db->where('id_penjualan', $id);
-        $delete = $this->db->delete('penjualan');
+        $delete = $this->penjualan->delete($id);
         if ($delete) {
             $this->response(array('status' => 'success'), 201);
         } else {

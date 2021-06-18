@@ -13,6 +13,7 @@ class PemasokController extends REST_Controller
     {
         parent::__construct($config);
         $this->load->database();
+        $this->load->model('Pemasok_model', 'pemasok');
     }
 
     //Menampilkan data master pemasok
@@ -20,7 +21,7 @@ class PemasokController extends REST_Controller
     {
         $id = $this->get('id_pemasok');
         if ($id == '') {
-            $tokodita = $this->db->get('pemasok')->result();
+            $tokodita = $this->pemasok->get_all()->result();
         } else {
             $this->db->where('id', $id);
             $tokodita = $this->db->get('pemasok')->result();
@@ -49,7 +50,7 @@ class PemasokController extends REST_Controller
                 'kota'          => $this->post('kota'),
                 'telepon'       => $this->post('telepon')
             );
-            $insert = $this->db->insert('pemasok', $data);
+            $insert = $this->pemasok->insert($data);
             if ($insert) {
                 $this->response($data, 200);
             } else {
@@ -80,9 +81,8 @@ class PemasokController extends REST_Controller
             'kota'           => $this->put('kota'),
             'telepon'        => $this->put('telepon')
         );
-        $this->db->where('id_pemasok', $id);
-        $update = $this->db->update('pemasok', $data);
-        if ($update) {
+        $put = $this->pemasok->put($data, $id);
+        if ($put) {
             $this->response($data, 200);
         } else {
             $this->response(array('status' => 'fail', 502));
@@ -97,7 +97,7 @@ class PemasokController extends REST_Controller
 
         $id = $this->delete('id_pemasok');
         $this->db->where('id_pemasok', $id);
-        $delete = $this->db->delete('pemasok');
+        $delete = $this->pemasok->delete('pemasok');
         if ($delete) {
             $this->response(array('status' => 'success'), 201);
         } else {

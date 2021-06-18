@@ -13,6 +13,7 @@ class PembelianController extends REST_Controller
     {
         parent::__construct($config);
         $this->load->database();
+        $this->load->model('Pembelian_model', 'pembelian');
     }
 
     //Menampilkan data pembelian
@@ -20,7 +21,7 @@ class PembelianController extends REST_Controller
     {
         $id = $this->get('id_pembelian');
         if ($id == '') {
-            $tokodita = $this->db->get('pembelian')->result();
+            $tokodita = $this->pembelian->get_all()->result();
         } else {
             $this->db->where('id', $id);
             $tokodita = $this->db->get('pembelian')->result();
@@ -55,7 +56,7 @@ class PembelianController extends REST_Controller
                 'quantity'     => $this->post('quantity'),
                 'tanggal'      => $this->post('tanggal')
             );
-            $insert = $this->db->insert('pembelian', $data);
+            $insert = $this->pembelian->post($data);
             if ($insert) {
                 $this->response($data, 200);
             } else {
@@ -92,9 +93,8 @@ class PembelianController extends REST_Controller
             'quantity'     => $this->put('quantity'),
             'tanggal'      => $this->put('tanggal')
         );
-        $this->db->where('id_pembelian', $id);
-        $update = $this->db->update('pembelian', $data);
-        if ($update) {
+        $put = $this->pembelian->put($data, $id);
+        if ($put) {
             $this->response($data, 200);
         } else {
             $this->response(array('status' => 'fail', 502));
@@ -107,7 +107,7 @@ class PembelianController extends REST_Controller
     {
         $id = $this->delete('id_pembelian');
         $this->db->where('id_pembelian', $id);
-        $delete = $this->db->delete('pembelian');
+        $delete = $this->pembelian->delete($id);
         if ($delete) {
             $this->response(array('status' => 'success'), 201);
         } else {

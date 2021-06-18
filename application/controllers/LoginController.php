@@ -21,7 +21,7 @@ class LoginController extends REST_Controller
     {
         $id = $this->get('id_user');
         if ($id == '') {
-            $tokodita = $this->db->get('login')->result();
+            $tokodita = $this->user->get_all()->result();
         } else {
             $this->db->where('id_user', $id);
             $tokodita = $this->db->get('login')->result();
@@ -82,9 +82,8 @@ class LoginController extends REST_Controller
                 'password'   => $this->put('password'),
                 'level'      => $this->put('level')
             );
-            $this->db->where('id_user', $id);
-            $update = $this->db->update('login', $data);
-            if ($update) {
+            $put = $this->user->put($data, $id);
+            if ($put) {
                 $this->response($data, 200);
             } else {
                 $this->response(array('status' => 'fail', 502));
@@ -97,7 +96,7 @@ class LoginController extends REST_Controller
     {
         $id = $this->delete('id_user');
         $this->db->where('id_user', $id);
-        $delete = $this->db->delete('login');
+        $delete = $this->user->delete('login');
         if ($delete) {
             $this->response(array('status' => 'success'), 201);
         } else {
