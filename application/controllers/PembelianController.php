@@ -13,6 +13,7 @@ class PembelianController extends REST_Controller
     {
         parent::__construct($config);
         $this->load->database();
+        $this->load->model('Pembelian_model', 'pembelian');
     }
 
     //Menampilkan data pembelian
@@ -20,7 +21,7 @@ class PembelianController extends REST_Controller
     {
         $id = $this->get('id_pembelian');
         if ($id == '') {
-            $tokodita = $this->db->get('pembelian')->result();
+            $tokodita = $this->pembelian->get_all()->result();
         } else {
             $this->db->where('id', $id);
             $tokodita = $this->db->get('pembelian')->result();
@@ -55,7 +56,7 @@ class PembelianController extends REST_Controller
                 'quantity'     => $this->post('quantity'),
                 'tanggal'      => $this->post('tanggal')
             );
-            $insert = $this->db->insert('pembelian', $data);
+            $insert = $this->pembelian->post($data);
             if ($insert) {
                 $this->response($data, 200);
             } else {
@@ -67,7 +68,7 @@ class PembelianController extends REST_Controller
     //memperbarui data pembelian
     function index_put()
     {
-        $this->load->helper('form', 'url');
+        /*$this->load->helper('form', 'url');
         $this->load->library('form_validation');
 
         $this->form_validation->set_rules('id_pemasok', 'Pemasok', 'required');
@@ -80,26 +81,25 @@ class PembelianController extends REST_Controller
 
         if ($this->form_validation->run() == FALSE) {
             $this->response(array('status' => 'fail,isi sesuai format', 502));
+        } else { */
+        $id = $this->put('id_pembelian');
+        $data = array(
+            'id_pembelian' => $this->put('id_pembelian'),
+            'id_pemasok'   => $this->put('id_pemasok'),
+            'id_barang'    => $this->put('id_barang'),
+            'nomor_nota'   => $this->put('nomor_nota'),
+            'harga_modal'  => $this->put('harga_modal'),
+            'harga_jual'   => $this->put('harga_jual'),
+            'quantity'     => $this->put('quantity'),
+            'tanggal'      => $this->put('tanggal')
+        );
+        $put = $this->pembelian->put($data, $id);
+        if ($put) {
+            $this->response($data, 200);
         } else {
-            $id = $this->put('id_pembelian');
-            $data = array(
-                'id_pembelian' => $this->put('id_pembelian'),
-                'id_pemasok'   => $this->put('id_pemasok'),
-                'id_barang'    => $this->put('id_barang'),
-                'nomor_nota'   => $this->put('nomor_nota'),
-                'harga_modal'  => $this->put('harga_modal'),
-                'harga_jual'   => $this->put('harga_jual'),
-                'quantity'     => $this->put('quantity'),
-                'tanggal'      => $this->put('tanggal')
-            );
-            $this->db->where('id_pembelian', $id);
-            $update = $this->db->update('pembelian', $data);
-            if ($update) {
-                $this->response($data, 200);
-            } else {
-                $this->response(array('status' => 'fail', 502));
-            }
+            $this->response(array('status' => 'fail', 502));
         }
+        //}
     }
 
     //menghapus salah satu data pembelian
@@ -107,7 +107,7 @@ class PembelianController extends REST_Controller
     {
         $id = $this->delete('id_pembelian');
         $this->db->where('id_pembelian', $id);
-        $delete = $this->db->delete('pembelian');
+        $delete = $this->pembelian->delete($id);
         if ($delete) {
             $this->response(array('status' => 'success'), 201);
         } else {

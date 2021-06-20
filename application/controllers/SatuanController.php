@@ -13,6 +13,7 @@ class SatuanController extends REST_Controller
     {
         parent::__construct($config);
         $this->load->database();
+        $this->load->model('Satuan_model', 'satuan');
     }
 
     //Menampilkan data satuan
@@ -21,7 +22,7 @@ class SatuanController extends REST_Controller
 
         $id = $this->get('id_satuan');
         if ($id == '') {
-            $tokodita = $this->db->get('satuan')->result();
+            $tokodita = $this->satuan->get_all()->result();
         } else {
             $this->db->where('id', $id);
             $tokodita = $this->db->get('satuan')->result();
@@ -44,7 +45,7 @@ class SatuanController extends REST_Controller
                 'id_satuan'    => $this->post('id_satuan'),
                 'nama_satuan'  => $this->post('nama_satuan')
             );
-            $insert = $this->db->insert('satuan', $data);
+            $insert = $this->satuan->insert($data);
             if ($insert) {
                 $this->response($data, 200);
             } else {
@@ -56,27 +57,26 @@ class SatuanController extends REST_Controller
     //memperbarui data master satuan
     function index_put()
     {
-        $this->load->helper('form', 'url');
+        /*$this->load->helper('form', 'url');
         $this->load->library('form_validation');
 
         $this->form_validation->set_rules('nama_satuan', 'Nama Satuan', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->response(array('status' => 'fail,isi sesuai format', 502));
+        } else { */
+        $id = $this->put('id_satuan');
+        $data = array(
+            'id_satuan'    => $this->put('id_satuan'),
+            'nama_satuan'  => $this->put('nama_satuan')
+        );
+        $put = $this->Satuan->put($data, $id);
+        if ($put) {
+            $this->response($data, 200);
         } else {
-            $id = $this->put('id_satuan');
-            $data = array(
-                'id_satuan'    => $this->put('id_satuan'),
-                'nama_satuan'  => $this->put('nama_satuan')
-            );
-            $this->db->where('id_satuan', $id);
-            $update = $this->db->update('satuan', $data);
-            if ($update) {
-                $this->response($data, 200);
-            } else {
-                $this->response(array('status' => 'fail', 502));
-            }
+            $this->response(array('status' => 'fail', 502));
         }
+        //}
     }
 
     //menghapus salah satu data satuan
@@ -85,7 +85,7 @@ class SatuanController extends REST_Controller
 
         $id = $this->delete('id_satuan');
         $this->db->where('id_satuan', $id);
-        $delete = $this->db->delete('satuan');
+        $delete = $this->Satuan->delete($id);
         if ($delete) {
             $this->response(array('status' => 'success'), 201);
         } else {

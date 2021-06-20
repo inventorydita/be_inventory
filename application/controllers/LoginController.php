@@ -13,6 +13,7 @@ class LoginController extends REST_Controller
     {
         parent::__construct($config);
         $this->load->database();
+        $this->load->model('User_model', 'user');
     }
 
     //Menampilkan data user
@@ -20,7 +21,7 @@ class LoginController extends REST_Controller
     {
         $id = $this->get('id_user');
         if ($id == '') {
-            $tokodita = $this->db->get('login')->result();
+            $tokodita = $this->user->get_all()->result();
         } else {
             $this->db->where('id_user', $id);
             $tokodita = $this->db->get('login')->result();
@@ -31,8 +32,7 @@ class LoginController extends REST_Controller
     //mengirim atau menambah data user
     function index_post()
     {
-        $this->load->helper(array('form', 'url'));
-
+        /* $this->load->helper(array('form', 'url'));
         $this->load->library('form_validation');
 
         $this->form_validation->set_rules('username', 'Username', 'required');
@@ -43,21 +43,20 @@ class LoginController extends REST_Controller
 
         if ($this->form_validation->run() == FALSE) {
             $this->response(array('status' => 'fail, isi sesuai format', 502));
+        } else {*/
+        $data = array(
+            'id_user'    => $this->post('id_user'), -'username'   => $this->post('username'),
+            'email'      => $this->post('email'),
+            'password'   => $this->post('password'),
+            'level'      => $this->post('level')
+        );
+        $insert = $this->user->insert($data); //$this->db->insert('login', $data);
+        if ($insert) {
+            $this->response($data, 200);
         } else {
-            $data = array(
-                'id_user'    => $this->post('id_user'),
-                'username'   => $this->post('username'),
-                'email'      => $this->post('email'),
-                'password'   => $this->post('password'),
-                'level'      => $this->post('level')
-            );
-            $insert = $this->db->insert('user', $data);
-            if ($insert) {
-                $this->response($data, 200);
-            } else {
-                $this->response(array('status' => 'fail', 502));
-            }
+            $this->response(array('status' => 'fail', 502));
         }
+        //}
     }
 
     //memperbarui data user
@@ -69,7 +68,7 @@ class LoginController extends REST_Controller
 
         $this->form_validation->set_rules('username', 'Username', 'required');
         $this->form_validation->set_rules('email', 'Email', 'required');
-        $this->form_validation->set_rules('password', 'Password', 'required', array('required' => 'You must provide a %s.'));
+        $this->form_validation->set_rules('password', 'Password', 'required');
         $this->form_validation->set_rules('level', 'Level', 'required');
 
         if ($this->form_validation->run() == FALSE) {
@@ -83,9 +82,8 @@ class LoginController extends REST_Controller
                 'password'   => $this->put('password'),
                 'level'      => $this->put('level')
             );
-            $this->db->where('id_user', $id);
-            $update = $this->db->update('login', $data);
-            if ($update) {
+            $put = $this->user->put($data, $id);
+            if ($put) {
                 $this->response($data, 200);
             } else {
                 $this->response(array('status' => 'fail', 502));
@@ -98,7 +96,7 @@ class LoginController extends REST_Controller
     {
         $id = $this->delete('id_user');
         $this->db->where('id_user', $id);
-        $delete = $this->db->delete('login');
+        $delete = $this->user->delete('login');
         if ($delete) {
             $this->response(array('status' => 'success'), 201);
         } else {

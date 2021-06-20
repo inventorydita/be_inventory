@@ -13,6 +13,7 @@ class MasterBarangController extends REST_Controller
     {
         parent::__construct($config);
         $this->load->database();
+        $this->load->model('Barang_model', 'barang');
     }
 
     //Menampilkan data master barang
@@ -20,7 +21,7 @@ class MasterBarangController extends REST_Controller
     {
         $id = $this->get('id_barang');
         if ($id == '') {
-            $tokodita = $this->db->get('master_barang')->result();
+            $tokodita = $this->barang->get_all()->result();
         } else {
             $this->db->where('id', $id);
             $tokodita = $this->db->get('master_barang')->result();
@@ -51,7 +52,7 @@ class MasterBarangController extends REST_Controller
                 'harga_modal'   => $this->post('harga_modal'),
                 'harga_jual'    => $this->post('harga_jual')
             );
-            $insert = $this->db->insert('master_barang', $data);
+            $insert = $this->barang->post($data);
             if ($insert) {
                 $this->response($data, 200);
             } else {
@@ -64,7 +65,7 @@ class MasterBarangController extends REST_Controller
     function index_put()
     {
 
-        $this->load->helper('form', 'url');
+        /*$this->load->helper('form', 'url');
         $this->load->library('form_validation');
 
         $this->form_validation->set_rules('nama_barang', 'Nama Barang', 'required');
@@ -75,24 +76,23 @@ class MasterBarangController extends REST_Controller
 
         if ($this->form_validation->run() == FALSE) {
             $this->response(array('status' => 'fail,isi sesuai format', 502));
+        } else {*/
+        $id = $this->put('id_barang');
+        $data = array(
+            'id_barang'     => $this->put('id_barang'),
+            'nama_barang'   => $this->put('nama_barang'),
+            'id_satuan'     => $this->put('id_satuan'),
+            'id_pemasok'    => $this->put('id_pemasok'),
+            'harga_modal'   => $this->put('harga_modal'),
+            'harga_jual'    => $this->put('harga_jual')
+        );
+        $put = $this->barang->put($data, $id);
+        if ($put) {
+            $this->response($data, 200);
         } else {
-            $id = $this->put('id_barang');
-            $data = array(
-                'id_barang'     => $this->put('id_barang'),
-                'nama_barang'   => $this->put('nama_barang'),
-                'id_satuan'     => $this->put('id_satuan'),
-                'id_pemasok'    => $this->put('id_pemasok'),
-                'harga_modal'   => $this->put('harga_modal'),
-                'harga_jual'    => $this->put('harga_jual')
-            );
-            $this->db->where('id_barang', $id);
-            $update = $this->db->update('master_barang', $data);
-            if ($update) {
-                $this->response($data, 200);
-            } else {
-                $this->response(array('status' => 'fail', 502));
-            }
+            $this->response(array('status' => 'fail', 502));
         }
+        //}
     }
 
     //menghapus salah satu data master barang
@@ -100,7 +100,7 @@ class MasterBarangController extends REST_Controller
     {
         $id = $this->delete('id_barang');
         $this->db->where('id_barang', $id);
-        $delete = $this->db->delete('master_barang');
+        $delete = $this->barang->delete($id);
         if ($delete) {
             $this->response(array('status' => 'success'), 201);
         } else {

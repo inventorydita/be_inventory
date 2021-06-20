@@ -13,6 +13,7 @@ class PemasokController extends REST_Controller
     {
         parent::__construct($config);
         $this->load->database();
+        $this->load->model('Pemasok_model', 'pemasok');
     }
 
     //Menampilkan data master pemasok
@@ -20,7 +21,7 @@ class PemasokController extends REST_Controller
     {
         $id = $this->get('id_pemasok');
         if ($id == '') {
-            $tokodita = $this->db->get('pemasok')->result();
+            $tokodita = $this->pemasok->get_all()->result();
         } else {
             $this->db->where('id', $id);
             $tokodita = $this->db->get('pemasok')->result();
@@ -38,7 +39,6 @@ class PemasokController extends REST_Controller
         $this->form_validation->set_rules('alamat', 'Alamat', 'required');
         $this->form_validation->set_rules('kota', 'Kota', 'required');
         $this->form_validation->set_rules('telepon', 'Telepon', 'required');
-        $this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->response(array('status' => 'fail,isi sesuai format', 502));
@@ -50,7 +50,7 @@ class PemasokController extends REST_Controller
                 'kota'          => $this->post('kota'),
                 'telepon'       => $this->post('telepon')
             );
-            $insert = $this->db->insert('pemasok', $data);
+            $insert = $this->pemasok->insert($data);
             if ($insert) {
                 $this->response($data, 200);
             } else {
@@ -62,35 +62,34 @@ class PemasokController extends REST_Controller
     //memperbarui data master pemasok
     function index_put()
     {
-        $this->load->helper('form', 'url');
+        /*$this->load->helper('form', 'url');
         $this->load->library('form_validation');
 
         $this->form_validation->set_rules('nama_pemasok', 'Nama Pemasok', 'required');
-        $this->form_validation->set_rules('alamat', 'Alamat', 'required');
+        $this->form_validation->set_rules($this->put('alamat'), 'Alamat', 'required');
         $this->form_validation->set_rules('kota', 'Kota', 'required');
         $this->form_validation->set_rules('telepon', 'Telepon', 'required');
-        $this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->response(array('status' => 'fail,isi sesuai format', 502));
+        } else {*/
+        $id = $this->put('id_pemasok');
+        $data = array(
+            'id_pemasok'     => $this->put('id_pemasok'),
+            'nama_pemasok'   => $this->put('nama_pemasok'),
+            'alamat'         => $this->put('alamat'),
+            'kota'           => $this->put('kota'),
+            'telepon'        => $this->put('telepon')
+        );
+        $put = $this->pemasok->put($data, $id);
+        if ($put) {
+            $this->response($data, 200);
         } else {
-            $id = $this->put('id_pemasok');
-            $data = array(
-                'id_pemasok'     => $this->put('id_pemasok'),
-                'nama_pemasok'   => $this->put('nama_pemasok'),
-                'alamat'         => $this->put('alamat'),
-                'kota'           => $this->put('kota'),
-                'telepon'        => $this->put('telepon')
-            );
-            $this->db->where('id_pemasok', $id);
-            $update = $this->db->update('pemasok', $data);
-            if ($update) {
-                $this->response($data, 200);
-            } else {
-                $this->response(array('status' => 'fail', 502));
-            }
+            $this->response(array('status' => 'fail', 502));
         }
+        //} 
     }
+
 
     //menghapus salah satu data pemasok
     function index_delete()
@@ -98,7 +97,7 @@ class PemasokController extends REST_Controller
 
         $id = $this->delete('id_pemasok');
         $this->db->where('id_pemasok', $id);
-        $delete = $this->db->delete('pemasok');
+        $delete = $this->pemasok->delete('pemasok');
         if ($delete) {
             $this->response(array('status' => 'success'), 201);
         } else {

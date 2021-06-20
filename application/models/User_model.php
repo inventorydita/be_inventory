@@ -1,37 +1,31 @@
-<?
-/* file pembelian model */
+<?php
+/* file user model */
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class PembelianController extends CI_Model
+class User_model extends CI_Model
 {
-    public $table = 'pembelian';
-    public $id = 'id_pembelian';
+    public $table = 'user';
+    public $id = 'id_user';
 
     function __construct()
     {
         parent::__construct();
     }
 
-    //untuk menampilkan semua data
-    function get_all()
+    //untuk insert data user
+    function insert($data)
     {
         $this->db->select('*');
-        $this->db->from('pembelian');
-        $this->db->join('barang', 'barang.id_barang = pembelian.id_barang');
-        $this->db->join('pemasok', 'pemasok.id_pemasok = pembelian.id_pemasok');
+        $this->db->from('user');
         $data = $this->db->get();
         return $data;
     }
-
     //untuk menampilkan data berdasarkan id
     function get_by_id($id)
     {
         $this->db->select('*');
-        $this->db->from('pembelian');
-        $this->db->join('barang', 'barang.id_barang = pembelian.id_barang');
-        $this->db->join('pemasok', 'pemasok.id_pemasok = pembelian.id_pemasok');
-        $this->db->where('pembelian.id_pembelian', $id);
+        $this->db->from('user');
         $data = $this->db->get();
         return $data;
     }
@@ -39,11 +33,10 @@ class PembelianController extends CI_Model
     //untuk mengedit data
     function put($data, $id)
     {
-        $this->db->where('id_pembelian', $id);
+        $this->db->where('id_user', $id);
         $update = $this->db->update($this->table, $data);
         return $update;
     }
-
 
     //untuk menambah data
     function post($data)
@@ -55,7 +48,7 @@ class PembelianController extends CI_Model
     //untuk menghapus data
     function delete($id)
     {
-        $this->db->where('id_barang', $id);
+        $this->db->where('id_user', $id);
         $delete = $this->db->delete($this->table);
         return $delete;
     }

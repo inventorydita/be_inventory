@@ -1,12 +1,12 @@
-<?
-/* file pembelian model */
+<?php
+/* file master barang model */
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class PembelianController extends CI_Model
+class MasterBarangController extends CI_Model
 {
-    public $table = 'pembelian';
-    public $id = 'id_pembelian';
+    public $table = 'master_barang';
+    public $id = 'id_barang';
 
     function __construct()
     {
@@ -17,9 +17,9 @@ class PembelianController extends CI_Model
     function get_all()
     {
         $this->db->select('*');
-        $this->db->from('pembelian');
-        $this->db->join('barang', 'barang.id_barang = pembelian.id_barang');
-        $this->db->join('pemasok', 'pemasok.id_pemasok = pembelian.id_pemasok');
+        $this->db->from('master_barang');
+        $this->db->join('satuan', 'satuan.id_satuan = master_barang.id_satuan');
+        $this->db->join('pemasok', 'pemasok.id_pemasok = master_barang.id_pemasok');
         $data = $this->db->get();
         return $data;
     }
@@ -28,10 +28,10 @@ class PembelianController extends CI_Model
     function get_by_id($id)
     {
         $this->db->select('*');
-        $this->db->from('pembelian');
-        $this->db->join('barang', 'barang.id_barang = pembelian.id_barang');
-        $this->db->join('pemasok', 'pemasok.id_pemasok = pembelian.id_pemasok');
-        $this->db->where('pembelian.id_pembelian', $id);
+        $this->db->from('master_barang');
+        $this->db->join('satuan', 'satuan.id_satuan = master_barang.id_satuan');
+        $this->db->join('pemasok', 'pemasok.id_pemasok = master_barang.id_pemasok');
+        $this->db->where('master_barang.id_barang', $id);
         $data = $this->db->get();
         return $data;
     }
@@ -39,11 +39,10 @@ class PembelianController extends CI_Model
     //untuk mengedit data
     function put($data, $id)
     {
-        $this->db->where('id_pembelian', $id);
+        $this->db->where('id_barang', $id);
         $update = $this->db->update($this->table, $data);
         return $update;
     }
-
 
     //untuk menambah data
     function post($data)
