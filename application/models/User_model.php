@@ -3,7 +3,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class LoginController extends CI_Model
+class User_model extends CI_Model
 {
     public $table = 'user';
     public $id = 'id_user';
@@ -13,8 +13,8 @@ class LoginController extends CI_Model
         parent::__construct();
     }
 
-    //untuk insert data user
-    function insert($data)
+    //untuk menampilkan semua data
+    function get_all()
     {
         $this->db->select('*');
         $this->db->from('user');

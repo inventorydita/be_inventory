@@ -3,7 +3,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class SatuanController extends CI_Model
+class Satuan_model extends CI_Model
 {
     public $table = 'satuan';
     public $id = 'id_satuan';

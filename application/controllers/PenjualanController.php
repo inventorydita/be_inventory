@@ -21,7 +21,7 @@ class PenjualanController extends REST_Controller
     {
         $id = $this->get('id_penjualan');
         if ($id == '') {
-            $tokodita = $this->db->get_all()->result();
+            $tokodita = $this->penjualan->get_all()->result();
         } else {
             $this->db->where('id', $id);
             $tokodita = $this->db->get('penjualan')->result();
