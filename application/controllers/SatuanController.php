@@ -23,11 +23,17 @@ class SatuanController extends REST_Controller
         $id = $this->get('id_satuan');
         if ($id == '') {
             $tokodita = $this->satuan->get_all()->result();
+            $respon['status'] = true;
+            $respon['message'] = "berhasil menampilkan semua data";
+            $respon['data'] = $tokodita;
         } else {
             $this->db->where('id', $id);
-            $tokodita = $this->db->get('satuan')->result();
+            $tokodita = $this->db->get_by_id('satuan')->result();
+            $respon['status'] = true;
+            $respon['message'] = "berhasil menampilkan semua data";
+            $respon['data'] = $tokodita;
         }
-        $this->response($tokodita, 200);
+        $this->response($respon, 200);
     }
 
     //mengirim atau menambah data satuan
@@ -45,11 +51,17 @@ class SatuanController extends REST_Controller
                 'id_satuan'    => $this->post('id_satuan'),
                 'nama_satuan'  => $this->post('nama_satuan')
             );
-            $insert = $this->satuan->insert($data);
+            $insert = $this->satuan->post($data);
             if ($insert) {
-                $this->response($data, 200);
+                $respon['status'] = true;
+                $respon['message'] = "berhasil menambahkan data";
+                $respon['data'] = $data;
+                $this->response($respon, 200);
             } else {
-                $this->response(array('status' => 'fail', 502));
+                $respon['status'] = false;
+                $respon['message'] = "gagal menambahkan data";
+                $respon['data'] = $data;
+                $this->response($respon, 500);
             }
         }
     }
@@ -70,11 +82,17 @@ class SatuanController extends REST_Controller
             'id_satuan'    => $this->put('id_satuan'),
             'nama_satuan'  => $this->put('nama_satuan')
         );
-        $put = $this->Satuan->put($data, $id);
+        $put = $this->satuan->put($data, $id);
         if ($put) {
-            $this->response($data, 200);
+            $respon['status'] = true;
+            $respon['message'] = "berhasil mengubah data";
+            $respon['data'] = $data;
+            $this->response($respon, 200);
         } else {
-            $this->response(array('status' => 'fail', 502));
+            $respon['status'] = false;
+            $respon['message'] = "gagal mengubah data";
+            $respon['data'] = $data;
+            $this->response($respon, 500);
         }
         //}
     }
@@ -85,11 +103,17 @@ class SatuanController extends REST_Controller
 
         $id = $this->delete('id_satuan');
         $this->db->where('id_satuan', $id);
-        $delete = $this->Satuan->delete($id);
+        $delete = $this->satuan->delete($id);
         if ($delete) {
-            $this->response(array('status' => 'success'), 201);
+            $respon['status'] = true;
+            $respon['message'] = "berhasil menghapus data";
+            $respon['data'] = $delete;
+            $this->response($respon, 200);
         } else {
-            $this->response(array('status' => 'fail', 502));
+            $respon['status'] = true;
+            $respon['message'] = "berhasil menghapus data";
+            $respon['data'] = $delete;
+            $this->response($respon, 500);
         }
     }
 

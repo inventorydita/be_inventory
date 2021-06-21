@@ -22,11 +22,17 @@ class PenjualanController extends REST_Controller
         $id = $this->get('id_penjualan');
         if ($id == '') {
             $tokodita = $this->penjualan->get_all()->result();
+            $respon['status'] = true;
+            $respon['message'] = "berhasil menampilkan semua data";
+            $respon['data'] = $tokodita;
         } else {
             $this->db->where('id', $id);
-            $tokodita = $this->db->get('penjualan')->result();
+            $tokodita = $this->db->get_by_id('penjualan')->result();
+            $respon['status'] = true;
+            $respon['message'] = "berhasil menampilkan semua data";
+            $respon['data'] = $tokodita;
         }
-        $this->response($tokodita, 200);
+        $this->response($respon, 200);
     }
 
     //mengirim atau menambah data penjualan
@@ -55,9 +61,15 @@ class PenjualanController extends REST_Controller
             );
             $insert = $this->penjualan->post($data);
             if ($insert) {
-                $this->response($data, 200);
+                $respon['status'] = true;
+                $respon['message'] = "berhasil menambahkan data";
+                $respon['data'] = $data;
+                $this->response($respon, 200);
             } else {
-                $this->response(array('status' => 'fail', 502));
+                $respon['status'] = false;
+                $respon['message'] = "gagal menambahkan data";
+                $respon['data'] = $data;
+                $this->response($respon, 500);
             }
         }
     }
@@ -87,11 +99,17 @@ class PenjualanController extends REST_Controller
             'subtotal'     => $this->put('subtotal'),
             'tanggal'      => $this->put('tanggal')
         );
-        $put = $this->penjualan->put($data . $id);
+        $put = $this->penjualan->put($data, $id);
         if ($put) {
-            $this->response($data, 200);
+            $respon['status'] = true;
+            $respon['message'] = "berhasil mengubah data";
+            $respon['data'] = $data;
+            $this->response($respon, 200);
         } else {
-            $this->response(array('status' => 'fail', 502));
+            $respon['status'] = false;
+            $respon['message'] = "gagal mengubah data";
+            $respon['data'] = $data;
+            $this->response($respon, 500);
         }
         //}
     }
@@ -103,9 +121,15 @@ class PenjualanController extends REST_Controller
         $this->db->where('id_penjualan', $id);
         $delete = $this->penjualan->delete($id);
         if ($delete) {
-            $this->response(array('status' => 'success'), 201);
+            $respon['status'] = true;
+            $respon['message'] = "berhasil menghapus data";
+            $respon['data'] = $delete;
+            $this->response($respon, 200);
         } else {
-            $this->response(array('status' => 'fail', 502));
+            $respon['status'] = true;
+            $respon['message'] = "berhasil menghapus data";
+            $respon['data'] = $delete;
+            $this->response($respon, 200);
         }
     }
 
