@@ -3,7 +3,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class PenjualanController extends CI_Model
+class Penjualan_model extends CI_Model
 {
     public $table = 'penjualan';
     public $id = 'id_penjualan';
@@ -37,7 +37,7 @@ class PenjualanController extends CI_Model
     //untuk mengedit data
     function put($data, $id)
     {
-        $this->db->where('id_pembelian', $id);
+        $this->db->where('id_penjualan', $id);
         $update = $this->db->update($this->table, $data);
         return $update;
     }
@@ -52,7 +52,7 @@ class PenjualanController extends CI_Model
     //untuk menghapus data
     function delete($id)
     {
-        $this->db->where('id_pembelian', $id);
+        $this->db->where('id_penjualan', $id);
         $delete = $this->db->delete($this->table);
         return $delete;
     }

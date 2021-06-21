@@ -3,7 +3,7 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class MasterBarangController extends CI_Model
+class Barang_model extends CI_Model
 {
     public $table = 'master_barang';
     public $id = 'id_barang';

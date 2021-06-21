@@ -13,8 +13,8 @@ class User_model extends CI_Model
         parent::__construct();
     }
 
-    //untuk insert data user
-    function insert($data)
+    //untuk menampilkan semua data
+    function get_all()
     {
         $this->db->select('*');
         $this->db->from('user');

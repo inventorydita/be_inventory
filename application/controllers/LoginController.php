@@ -23,8 +23,8 @@ class LoginController extends REST_Controller
         if ($id == '') {
             $tokodita = $this->user->get_all()->result();
         } else {
-            $this->db->where('id_user', $id);
-            $tokodita = $this->db->get('login')->result();
+            $this->db->where('id', $id);
+            $tokodita = $this->db->get('user')->result();
         }
         $this->response($tokodita, 200);
     }
