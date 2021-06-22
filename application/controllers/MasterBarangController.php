@@ -22,11 +22,17 @@ class MasterBarangController extends REST_Controller
         $id = $this->get('id_barang');
         if ($id == '') {
             $tokodita = $this->barang->get_all()->result();
+            $respon['status'] = true;
+            $respon['message'] = "berhasil mengambil semua data";
+            $respon['data'] = $tokodita;
         } else {
             $this->db->where('id', $id);
-            $tokodita = $this->db->get('master_barang')->result();
+            $tokodita = $this->db->get_by_id()->result();
+            $respon['status'] = true;
+            $respon['message'] = "berhasil mengambil semua data";
+            $respon['data'] = $tokodita;
         }
-        $this->response($tokodita, 200);
+        $this->response($respon, 200);
     }
 
     //mengirim atau menambah data master barang baru
@@ -54,9 +60,15 @@ class MasterBarangController extends REST_Controller
             );
             $insert = $this->barang->post($data);
             if ($insert) {
-                $this->response($data, 200);
+                $respon['status'] = true;
+                $respon['message'] = "berhasil menambahkan data";
+                $respon['data'] = $data;
+                $this->response($respon, 200);
             } else {
-                $this->response(array('status' => 'fail', 502));
+                $respon['status'] = false;
+                $respon['message'] = "gagal menambahkan data";
+                $respon['data'] = $data;
+                $this->response($respon, 500);
             }
         }
     }
@@ -88,9 +100,15 @@ class MasterBarangController extends REST_Controller
         );
         $put = $this->barang->put($data, $id);
         if ($put) {
-            $this->response($data, 200);
+            $respon['status'] = true;
+            $respon['message'] = "berhasil mengubah data";
+            $respon['data'] = $data;
+            $this->response($respon, 200);
         } else {
-            $this->response(array('status' => 'fail', 502));
+            $respon['status'] = false;
+            $respon['message'] = "gagal mengubah data";
+            $respon['data'] = $data;
+            $this->response($respon, 500);
         }
         //}
     }
