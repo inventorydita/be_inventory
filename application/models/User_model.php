@@ -52,4 +52,11 @@ class User_model extends CI_Model
         $delete = $this->db->delete($this->table);
         return $delete;
     }
+
+    //untuk mengecek login
+    function cek_login($username, $password)
+    {
+        $cek_login = $this->db->get_where($this->table, array('username' => $username, 'password' => $password));
+        return $cek_login;
+    }
 }

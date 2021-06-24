@@ -26,10 +26,9 @@ class PemasokController extends REST_Controller
             $respon['message'] = "berhasil mengambil semua data";
             $respon['data'] = $tokodita;
         } else {
-            $this->db->where('id', $id);
             $tokodita = $this->db->get_by_id('pemasok')->result();
-            $respon['status'] = true;
-            $respon['message'] = "berhasil mengambil semua data";
+            $respon['status'] = false;
+            $respon['message'] = "gagal mengambil semua data";
             $respon['data'] = $tokodita;
         }
         $this->response($respon, 200);
@@ -121,10 +120,10 @@ class PemasokController extends REST_Controller
             $respon['data'] = $delete;
             $this->response($respon, 200);
         } else {
-            $respon['status'] = true;
-            $respon['message'] = "berhasil menghapus data";
+            $respon['status'] = false;
+            $respon['message'] = "gagal menghapus data";
             $respon['data'] = $delete;
-            $this->response($respon, 200);
+            $this->response($respon, 500);
         }
     }
 

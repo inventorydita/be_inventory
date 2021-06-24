@@ -28,8 +28,8 @@ class MasterBarangController extends REST_Controller
         } else {
             $this->db->where('id', $id);
             $tokodita = $this->db->get_by_id()->result();
-            $respon['status'] = true;
-            $respon['message'] = "berhasil mengambil semua data";
+            $respon['status'] = false;
+            $respon['message'] = "gagal mengambil semua data";
             $respon['data'] = $tokodita;
         }
         $this->response($respon, 200);
@@ -117,11 +117,16 @@ class MasterBarangController extends REST_Controller
     function index_delete()
     {
         $id = $this->delete('id_barang');
-        $this->db->where('id_barang', $id);
         $delete = $this->barang->delete($id);
         if ($delete) {
+            $respon['status'] = true;
+            $respon['message'] = "berhasil mengubah data";
+            $respon['data'] = $delete;
             $this->response(array('status' => 'success'), 201);
         } else {
+            $respon['status'] = false;
+            $respon['message'] = "gagal mengubah data";
+            $respon['data'] = $delete;
             $this->response(array('status' => 'fail', 502));
         }
     }

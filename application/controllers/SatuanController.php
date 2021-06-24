@@ -27,10 +27,9 @@ class SatuanController extends REST_Controller
             $respon['message'] = "berhasil menampilkan semua data";
             $respon['data'] = $tokodita;
         } else {
-            $this->db->where('id', $id);
             $tokodita = $this->db->get_by_id('satuan')->result();
-            $respon['status'] = true;
-            $respon['message'] = "berhasil menampilkan semua data";
+            $respon['status'] = false;
+            $respon['message'] = "gagal menampilkan semua data";
             $respon['data'] = $tokodita;
         }
         $this->response($respon, 200);
@@ -110,8 +109,8 @@ class SatuanController extends REST_Controller
             $respon['data'] = $delete;
             $this->response($respon, 200);
         } else {
-            $respon['status'] = true;
-            $respon['message'] = "berhasil menghapus data";
+            $respon['status'] = false;
+            $respon['message'] = "gagal menghapus data";
             $respon['data'] = $delete;
             $this->response($respon, 500);
         }
