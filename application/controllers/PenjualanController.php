@@ -28,8 +28,8 @@ class PenjualanController extends REST_Controller
         } else {
             $this->db->where('id', $id);
             $tokodita = $this->db->get_by_id('penjualan')->result();
-            $respon['status'] = true;
-            $respon['message'] = "berhasil menampilkan semua data";
+            $respon['status'] = false;
+            $respon['message'] = "gagal menampilkan semua data";
             $respon['data'] = $tokodita;
         }
         $this->response($respon, 200);
@@ -118,7 +118,6 @@ class PenjualanController extends REST_Controller
     function index_delete()
     {
         $id = $this->delete('id_penjualan');
-        $this->db->where('id_penjualan', $id);
         $delete = $this->penjualan->delete($id);
         if ($delete) {
             $respon['status'] = true;
@@ -126,8 +125,8 @@ class PenjualanController extends REST_Controller
             $respon['data'] = $delete;
             $this->response($respon, 200);
         } else {
-            $respon['status'] = true;
-            $respon['message'] = "berhasil menghapus data";
+            $respon['status'] = false;
+            $respon['message'] = "gagal menghapus data";
             $respon['data'] = $delete;
             $this->response($respon, 200);
         }
