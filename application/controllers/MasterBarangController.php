@@ -47,6 +47,8 @@ class MasterBarangController extends REST_Controller
         $this->form_validation->set_rules('harga_modal', 'Harga Modal', 'required');
         $this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
 
+
+
         if ($this->form_validation->run() == FALSE) {
             $this->response(array('status' => 'fail,isi sesuai format', 502));
         } else {
@@ -56,7 +58,8 @@ class MasterBarangController extends REST_Controller
                 'id_satuan'     => $this->post('id_satuan'),
                 'id_pemasok'    => $this->post('id_pemasok'),
                 'harga_modal'   => $this->post('harga_modal'),
-                'harga_jual'    => $this->post('harga_jual')
+                'harga_jual'    => $this->post('harga_jual'),
+                'kode_barang'   => $this->post('kode_barang')
             );
             $insert = $this->barang->post($data);
             if ($insert) {
