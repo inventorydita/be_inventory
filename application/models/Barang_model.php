@@ -48,6 +48,12 @@ class Barang_model extends CI_Model
     function post($data)
     {
         $insert = $this->db->insert($this->table, $data);
+        return $insert;
+    }
+
+    //untuk menambah kode
+    function kode_barang()
+    {
         $this->db->select('RIGHT(master_barang.kode_barang,5) as kode_barang', FALSE);
         $this->db->order_by('kode_barang', 'DESC');
         $this->db->limit(1);
@@ -61,7 +67,6 @@ class Barang_model extends CI_Model
         $batas = str_pad($kode, 5, "0", STR_PAD_LEFT);
         $kodetampil = "TD" . $batas;
         return $kodetampil;
-        return $insert;
     }
 
     //untuk menghapus data
