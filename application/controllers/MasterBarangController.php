@@ -56,7 +56,8 @@ class MasterBarangController extends REST_Controller
                 'id_satuan'     => $this->post('id_satuan'),
                 'id_pemasok'    => $this->post('id_pemasok'),
                 'harga_modal'   => $this->post('harga_modal'),
-                'harga_jual'    => $this->post('harga_jual')
+                'harga_jual'    => $this->post('harga_jual'),
+                'kode_barang'   => $this->barang->kode_barang()
             );
             $insert = $this->barang->post($data);
             if ($insert) {

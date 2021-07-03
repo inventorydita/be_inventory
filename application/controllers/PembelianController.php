@@ -47,7 +47,7 @@ class PembelianController extends REST_Controller
         $this->form_validation->set_rules('harga_modal', 'Harga Modal', 'required');
         $this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
         $this->form_validation->set_rules('quantity', 'Quantity', 'required');
-        $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
+        //$this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->response(array('status' => 'fail,isi sesuai format', 502));
@@ -60,7 +60,7 @@ class PembelianController extends REST_Controller
                 'harga_modal'  => $this->post('harga_modal'),
                 'harga_jual'   => $this->post('harga_jual'),
                 'quantity'     => $this->post('quantity'),
-                'tanggal'      => $this->post('tanggal')
+                //'tanggal'      => $this->post('tanggal')
             );
             $insert = $this->pembelian->post($data);
             if ($insert) {
@@ -103,7 +103,7 @@ class PembelianController extends REST_Controller
             'harga_modal'  => $this->put('harga_modal'),
             'harga_jual'   => $this->put('harga_jual'),
             'quantity'     => $this->put('quantity'),
-            'tanggal'      => $this->put('tanggal')
+            //'tanggal'      => $this->put('tanggal')
         );
         $put = $this->pembelian->put($data, $id);
         if ($put) {

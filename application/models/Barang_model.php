@@ -51,6 +51,24 @@ class Barang_model extends CI_Model
         return $insert;
     }
 
+    //untuk menambah kode
+    function kode_barang()
+    {
+        $this->db->select('RIGHT(master_barang.kode_barang,5) as kode_barang', FALSE);
+        $this->db->order_by('kode_barang', 'DESC');
+        $this->db->limit(1);
+        $query = $this->db->get('master_barang');
+        if ($query->num_rows() <> 0) {
+            $data = $query->row();
+            $kode = intval($data->kode_barang) + 1;
+        } else {
+            $kode = 1;
+        }
+        $batas = str_pad($kode, 5, "0", STR_PAD_LEFT);
+        $kodetampil = "TD" . $batas;
+        return $kodetampil;
+    }
+
     //untuk menghapus data
     function delete($id)
     {

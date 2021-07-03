@@ -32,7 +32,7 @@ class SatuanController extends REST_Controller
             $respon['message'] = "gagal menampilkan semua data";
             $respon['data'] = $tokodita;
         }
-        $this->response($respon, 200);
+        $this->response($respon, 500);
     }
 
     //mengirim atau menambah data satuan

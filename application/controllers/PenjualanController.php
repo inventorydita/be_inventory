@@ -45,7 +45,7 @@ class PenjualanController extends REST_Controller
         $this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
         $this->form_validation->set_rules('quantity', 'Quantity', 'required');
         $this->form_validation->set_rules('subtotal', 'Subtotal', 'required');
-        $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
+        //$this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
 
 
         if ($this->form_validation->run() == FALSE) {
@@ -57,7 +57,7 @@ class PenjualanController extends REST_Controller
                 'harga_jual'   => $this->post('harga_jual'),
                 'quantity'     => $this->post('quantity'),
                 'subtotal'     => $this->post('subtotal'),
-                'tanggal'      => $this->post('tanggal')
+                //'tanggal'      => $this->post('tanggal')
             );
             $insert = $this->penjualan->post($data);
             if ($insert) {
@@ -97,7 +97,7 @@ class PenjualanController extends REST_Controller
             'harga_jual'   => $this->put('harga_jual'),
             'quantity'     => $this->put('quantity'),
             'subtotal'     => $this->put('subtotal'),
-            'tanggal'      => $this->put('tanggal')
+            //'tanggal'      => $this->put('tanggal')
         );
         $put = $this->penjualan->put($data, $id);
         if ($put) {
