@@ -41,25 +41,32 @@ class PenjualanController extends REST_Controller
         $this->load->helper('form', 'url');
         $this->load->library('form_validation');
 
-        $this->form_validation->set_rules('id_barang', 'Barang', 'required');
-        $this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
-        $this->form_validation->set_rules('quantity', 'Quantity', 'required');
+        $this->form_validation->set_rules('nomor_nota', 'Nomor Nota', 'required');
         $this->form_validation->set_rules('subtotal', 'Subtotal', 'required');
-        //$this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
+        $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
 
 
         if ($this->form_validation->run() == FALSE) {
             $this->response(array('status' => 'fail,isi sesuai format', 502));
         } else {
             $data = array(
-                'id_penjualan' => $this->post('id_penjualan'),
-                'id_barang'    => $this->post('id_barang'),
-                'harga_jual'   => $this->post('harga_jual'),
-                'quantity'     => $this->post('quantity'),
+                'nomor_nota'     => $this->post('nomor_nota'),
                 'subtotal'     => $this->post('subtotal'),
-                //'tanggal'      => $this->post('tanggal')
+                'tanggal'      => $this->post('tanggal')
             );
             $insert = $this->penjualan->post($data);
+            if ($insert) {
+                $respon['status'] = true;
+                $respon['message'] = "berhasil menambahkan data";
+                $respon['data'] = $data;
+                $this->response($respon, 200);
+            } else {
+                $respon['status'] = false;
+                $respon['message'] = "gagal menambahkan data";
+                $respon['data'] = $data;
+                $this->response($respon, 500);
+            }
+            $insert = $this->detail_penjualan->post($data);
             if ($insert) {
                 $respon['status'] = true;
                 $respon['message'] = "berhasil menambahkan data";
@@ -77,27 +84,11 @@ class PenjualanController extends REST_Controller
     //memperbarui data penjualan
     function index_put()
     {
-        /*$this->load->helper('form', 'url');
-        $this->load->library('form_validation');
-
-        $this->form_validation->set_rules('id_barang', 'Barang', 'required');
-        $this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
-        $this->form_validation->set_rules('quantity', 'Quantity', 'required');
-        $this->form_validation->set_rules('subtotal', 'Subtotal', 'required');
-        $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
-
-
-        if ($this->form_validation->run() == FALSE) {
-            $this->response(array('status' => 'fail,isi sesuai format', 502));
-        } else { */
         $id = $this->put('id_penjualan');
         $data = array(
-            'id_penjualan' => $this->put('id_penjualan'),
-            'id_barang'    => $this->put('id_barang'),
-            'harga_jual'   => $this->put('harga_jual'),
-            'quantity'     => $this->put('quantity'),
-            'subtotal'     => $this->put('subtotal'),
-            //'tanggal'      => $this->put('tanggal')
+            'nomor_nota'     => $this->post('nomor_nota'),
+            'subtotal'     => $this->post('subtotal'),
+            'tanggal'      => $this->post('tanggal')
         );
         $put = $this->penjualan->put($data, $id);
         if ($put) {
@@ -111,7 +102,18 @@ class PenjualanController extends REST_Controller
             $respon['data'] = $data;
             $this->response($respon, 500);
         }
-        //}
+        $put = $this->detail_penjualan->put($data, $id);
+        if ($put) {
+            $respon['status'] = true;
+            $respon['message'] = "berhasil mengubah data";
+            $respon['data'] = $data;
+            $this->response($respon, 200);
+        } else {
+            $respon['status'] = false;
+            $respon['message'] = "gagal mengubah data";
+            $respon['data'] = $data;
+            $this->response($respon, 500);
+        }
     }
 
     //menghapus salah satu data penjualan
@@ -119,6 +121,19 @@ class PenjualanController extends REST_Controller
     {
         $id = $this->delete('id_penjualan');
         $delete = $this->penjualan->delete($id);
+        if ($delete) {
+            $respon['status'] = true;
+            $respon['message'] = "berhasil menghapus data";
+            $respon['data'] = $delete;
+            $this->response($respon, 200);
+        } else {
+            $respon['status'] = false;
+            $respon['message'] = "gagal menghapus data";
+            $respon['data'] = $delete;
+            $this->response($respon, 200);
+        }
+        $id = $this->delete('id_detail_penjualan');
+        $delete = $this->detail_penjualan->delete($id);
         if ($delete) {
             $respon['status'] = true;
             $respon['message'] = "berhasil menghapus data";

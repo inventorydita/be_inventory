@@ -43,18 +43,16 @@ class MasterBarangController extends REST_Controller
 
         $this->form_validation->set_rules('nama_barang', 'Nama Barang', 'required');
         $this->form_validation->set_rules('id_satuan', 'Satuan', 'required');
-        $this->form_validation->set_rules('id_pemasok', 'Pemasok', 'required');
         $this->form_validation->set_rules('harga_modal', 'Harga Modal', 'required');
         $this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
+        $this->form_validation->set_rules('kode_barang', 'Kode Barang', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->response(array('status' => 'fail,isi sesuai format', 502));
         } else {
             $data = array(
-                'id_barang'     => $this->post('id'),
                 'nama_barang'   => $this->post('nama_barang'),
                 'id_satuan'     => $this->post('id_satuan'),
-                'id_pemasok'    => $this->post('id_pemasok'),
                 'harga_modal'   => $this->post('harga_modal'),
                 'harga_jual'    => $this->post('harga_jual'),
                 'kode_barang'   => $this->barang->kode_barang()
@@ -77,27 +75,13 @@ class MasterBarangController extends REST_Controller
     //memperbarui data master barang/edit
     function index_put()
     {
-
-        /*$this->load->helper('form', 'url');
-        $this->load->library('form_validation');
-
-        $this->form_validation->set_rules('nama_barang', 'Nama Barang', 'required');
-        $this->form_validation->set_rules('id_satuan', 'Satuan', 'required');
-        $this->form_validation->set_rules('id_pemasok', 'Pemasok', 'required');
-        $this->form_validation->set_rules('harga_modal', 'Harga Modal', 'required');
-        $this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
-
-        if ($this->form_validation->run() == FALSE) {
-            $this->response(array('status' => 'fail,isi sesuai format', 502));
-        } else {*/
         $id = $this->put('id_barang');
         $data = array(
-            'id_barang'     => $this->put('id_barang'),
             'nama_barang'   => $this->put('nama_barang'),
             'id_satuan'     => $this->put('id_satuan'),
-            'id_pemasok'    => $this->put('id_pemasok'),
             'harga_modal'   => $this->put('harga_modal'),
-            'harga_jual'    => $this->put('harga_jual')
+            'harga_jual'    => $this->put('harga_jual'),
+            'kode_barang'   => $this->barang->kode_barang()
         );
         $put = $this->barang->put($data, $id);
         if ($put) {
@@ -111,7 +95,6 @@ class MasterBarangController extends REST_Controller
             $respon['data'] = $data;
             $this->response($respon, 500);
         }
-        //}
     }
 
     //menghapus salah satu data master barang
