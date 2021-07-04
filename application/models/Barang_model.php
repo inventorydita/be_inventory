@@ -19,7 +19,6 @@ class Barang_model extends CI_Model
         $this->db->select('*');
         $this->db->from('master_barang');
         $this->db->join('satuan', 'satuan.id_satuan = master_barang.id_satuan');
-        $this->db->join('pemasok', 'pemasok.id_pemasok = master_barang.id_pemasok');
         $data = $this->db->get();
         return $data;
     }
@@ -30,7 +29,6 @@ class Barang_model extends CI_Model
         $this->db->select('*');
         $this->db->from('master_barang');
         $this->db->join('satuan', 'satuan.id_satuan = master_barang.id_satuan');
-        $this->db->join('pemasok', 'pemasok.id_pemasok = master_barang.id_pemasok');
         $this->db->where('master_barang.id_barang', $id);
         $data = $this->db->get();
         return $data;
@@ -75,5 +73,10 @@ class Barang_model extends CI_Model
         $this->db->where('id_barang', $id);
         $delete = $this->db->delete($this->table);
         return $delete;
+    }
+
+    //untuk stok barang
+    function stok_barang()
+    {
     }
 }

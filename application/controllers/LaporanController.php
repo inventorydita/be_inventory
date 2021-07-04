@@ -34,4 +34,31 @@ class LaporanController extends REST_Controller
         }
         $this->response($respon, 500);
     }
+    function index_post()
+    {
+        $this->load->helper('form', 'url');
+        $this->load->library('form_validation');
+
+        $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->response(array('status' => 'fail,isi sesuai format', 502));
+        } else {
+            $data = array(
+                'tanggal'      => $this->post('tanggal')
+            );
+            $insert = $this->laporan->post($data);
+            if ($insert) {
+                $respon['status'] = true;
+                $respon['message'] = "berhasil menampilkan laporan";
+                $respon['data'] = $data;
+                $this->response($respon, 200);
+            } else {
+                $respon['status'] = false;
+                $respon['message'] = "gagal menampilkan laporan";
+                $respon['data'] = $data;
+                $this->response($respon, 500);
+            }
+        }
+    }
 }

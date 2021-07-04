@@ -41,28 +41,35 @@ class PembelianController extends REST_Controller
         $this->load->helper('form', 'url');
         $this->load->library('form_validation');
 
-        $this->form_validation->set_rules('id_pemasok', 'Pemasok', 'required');
-        $this->form_validation->set_rules('id_barang', 'Barang', 'required');
         $this->form_validation->set_rules('nomor_nota', 'Nomor Nota', 'required');
-        $this->form_validation->set_rules('harga_modal', 'Harga Modal', 'required');
-        $this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
-        $this->form_validation->set_rules('quantity', 'Quantity', 'required');
-        //$this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
+        $this->form_validation->set_rules('id_pemasok', 'Pemasok', 'required');
+        $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
+        $this->form_validation->set_rules('subtotal', 'Subtotal', 'required');
+
+
 
         if ($this->form_validation->run() == FALSE) {
             $this->response(array('status' => 'fail,isi sesuai format', 502));
         } else {
             $data = array(
-                'id_pembelian' => $this->post('id_pembelian'),
-                'id_pemasok'   => $this->post('id_pemasok'),
-                'id_barang'    => $this->post('id_barang'),
                 'nomor_nota'   => $this->post('nomor_nota'),
-                'harga_modal'  => $this->post('harga_modal'),
-                'harga_jual'   => $this->post('harga_jual'),
-                'quantity'     => $this->post('quantity'),
-                //'tanggal'      => $this->post('tanggal')
+                'id_pemasok'   => $this->post('id_pemasok'),
+                'tanggal'      => $this->post('tanggal'),
+                'subtotal'     => $this->post('subtotal')
             );
             $insert = $this->pembelian->post($data);
+            if ($insert) {
+                $respon['status'] = true;
+                $respon['message'] = "berhasil menambahkan data";
+                $respon['data'] = $data;
+                $this->response($respon, 200);
+            } else {
+                $respon['status'] = false;
+                $respon['message'] = "gagal menambahkan data";
+                $respon['data'] = $data;
+                $this->response($respon, 500);
+            }
+            $insert = $this->detail_pembelian->post($data);
             if ($insert) {
                 $respon['status'] = true;
                 $respon['message'] = "berhasil menambahkan data";
@@ -80,30 +87,12 @@ class PembelianController extends REST_Controller
     //memperbarui data pembelian
     function index_put()
     {
-        /*$this->load->helper('form', 'url');
-        $this->load->library('form_validation');
-
-        $this->form_validation->set_rules('id_pemasok', 'Pemasok', 'required');
-        $this->form_validation->set_rules('id_barang', 'Barang', 'required');
-        $this->form_validation->set_rules('nomor_nota', 'Nomor Nota', 'required');
-        $this->form_validation->set_rules('harga_modal', 'Harga Modal', 'required');
-        $this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
-        $this->form_validation->set_rules('quantity', 'Quantity', 'required');
-        $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
-
-        if ($this->form_validation->run() == FALSE) {
-            $this->response(array('status' => 'fail,isi sesuai format', 502));
-        } else { */
         $id = $this->put('id_pembelian');
         $data = array(
-            'id_pembelian' => $this->put('id_pembelian'),
-            'id_pemasok'   => $this->put('id_pemasok'),
-            'id_barang'    => $this->put('id_barang'),
-            'nomor_nota'   => $this->put('nomor_nota'),
-            'harga_modal'  => $this->put('harga_modal'),
-            'harga_jual'   => $this->put('harga_jual'),
-            'quantity'     => $this->put('quantity'),
-            //'tanggal'      => $this->put('tanggal')
+            'nomor_nota'   => $this->post('nomor_nota'),
+            'id_pemasok'   => $this->post('id_pemasok'),
+            'tanggal'      => $this->post('tanggal'),
+            'subtotal'     => $this->post('subtotal')
         );
         $put = $this->pembelian->put($data, $id);
         if ($put) {
@@ -117,7 +106,18 @@ class PembelianController extends REST_Controller
             $respon['data'] = $data;
             $this->response($respon, 500);
         }
-        //}
+        $put = $this->detail_pembelian->put($data, $id);
+        if ($put) {
+            $respon['status'] = true;
+            $respon['message'] = "berhasil menambahkan data";
+            $respon['data'] = $data;
+            $this->response($respon, 200);
+        } else {
+            $respon['status'] = false;
+            $respon['message'] = "gagal menambahkan data";
+            $respon['data'] = $data;
+            $this->response($respon, 500);
+        }
     }
 
     //menghapus salah satu data pembelian
@@ -126,6 +126,20 @@ class PembelianController extends REST_Controller
         $id = $this->delete('id_pembelian');
         $this->db->where('id_pembelian', $id);
         $delete = $this->pembelian->delete($id);
+        if ($delete) {
+            $respon['status'] = true;
+            $respon['message'] = "berhasil menghapus data";
+            $respon['data'] = $delete;
+            $this->response($respon, 200);
+        } else {
+            $respon['status'] = false;
+            $respon['message'] = "gagal menghapus data";
+            $respon['data'] = $delete;
+            $this->response($respon, 500);
+        }
+        $id = $this->delete('id_detail_pembelian');
+        $this->db->where('id_detail_pembelian', $id);
+        $delete = $this->detail_pembelian->delete($id);
         if ($delete) {
             $respon['status'] = true;
             $respon['message'] = "berhasil menghapus data";

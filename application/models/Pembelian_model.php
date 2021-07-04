@@ -18,7 +18,6 @@ class Pembelian_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('pembelian');
-        $this->db->join('master_barang', 'master_barang.id_barang = pembelian.id_barang');
         $this->db->join('pemasok', 'pemasok.id_pemasok = pembelian.id_pemasok');
         $data = $this->db->get();
         return $data;
@@ -29,7 +28,6 @@ class Pembelian_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('pembelian');
-        $this->db->join('master_barang', 'master_barang.id_barang = pembelian.id_barang');
         $this->db->join('pemasok', 'pemasok.id_pemasok = pembelian.id_pemasok');
         $this->db->where('pembelian.id_pembelian', $id);
         $data = $this->db->get();
