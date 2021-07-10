@@ -41,23 +41,24 @@ class PembelianController extends REST_Controller
     function index_post()
     {
         //AMBIL DATA JSON DARI REQUEST(EXFRONT END)
-         $request = json_decode(file_get_contents("php://input"));
-         $date = new DateTime();
-         //ambil data pembelian
-         $nomor_nota = $request->nomor_nota;
-         $tanggal =  date("Y-m-d H:i:s");
-         $subtotal = $request->subtotal;
-         $id_pemasok = $request->id_pemasok;
-         $id_pembelian = $date->getTimestamp();
+        $request = json_decode(file_get_contents("php://input"));
+        $date = new DateTime();
+        //ambil data pembelian
+        $nomor_nota = $request->nomor_nota;
+        $detail_pembelian = $request->detail_pembelian;
+        $subtotal = $request->subtotal;
+        $id_pemasok = $request->id_pemasok;
 
-         $detail_pembelian = $request->detail_pembelian;
+        $id_pembelian = $date->getTimestamp();
+        $tanggal =  date("Y-m-d H:i:s");
 
-      //  var_dump($id_pemasok);
-         //ambil data detail pembelian
+
+        //  var_dump($id_pemasok);
+        //ambil data detail pembelian
 
         //data yang disimpan ke db 
         $data = array(
-            'id_pembelian'=> $id_pembelian,
+            'id_pembelian' => $id_pembelian,
             'nomor_nota'   => $nomor_nota,
             'tanggal'      => $tanggal,
             'subtotal'     => $subtotal,
@@ -66,25 +67,26 @@ class PembelianController extends REST_Controller
         $insert = $this->pembelian->post($data);
         if ($insert) {
             $final_data = [];
-            foreach($detail_pembelian as $detail){
-                array_push($final_data,
+            foreach ($detail_pembelian as $detail) {
+                array_push(
+                    $final_data,
                     array(
-                        'id_barang'=> $detail->id_barang,
+                        'id_barang' => $detail->id_barang,
                         'harga_modal' => $detail->harga_modal,
-                        'harga_jual'=> $detail->harga_jual,
-                        'quantity'=> $detail->quantity,
-                        'id_pembelian'=>$id_pembelian
+                        'harga_jual' => $detail->harga_jual,
+                        'quantity' => $detail->quantity,
+                        'id_pembelian' => $id_pembelian
                     )
                 );
             }
             $insert_detail_pembelian = $this->pembelian->bulk_insert($final_data);
-            if($insert_detail_pembelian){
+            if ($insert_detail_pembelian) {
                 $respon['status'] = true;
                 $respon['message'] = "berhasil menambahkan data";
                 $respon['data'] = $data;
                 $this->response($respon, 200);
-            }else{
-                 $respon['status'] = false;
+            } else {
+                $respon['status'] = false;
                 $respon['message'] = "gagal menambahkan data detail";
                 $respon['data'] = $data;
                 $this->response($respon, 500);
@@ -95,7 +97,6 @@ class PembelianController extends REST_Controller
             $respon['data'] = $data;
             $this->response($respon, 500);
         }
-        
     }
 
     //memperbarui data pembelian

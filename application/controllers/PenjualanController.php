@@ -42,11 +42,13 @@ class PenjualanController extends REST_Controller
         $request = json_decode(file_get_contents("php://input"));
         $date = new DateTime();
         //ambil data penjualan
-        $id_penjualan = $date->getTimestamp();
         $nomor_nota = $request->nomor_nota;
-        $tanggal = date("Y-m-d H:i:s");
         $subtotal = $request->subtotal;
         $detail_penjualan = $request->detail_penjualan;
+
+
+        $tanggal = date("Y-m-d H:i:s");
+        $id_penjualan = $date->getTimestamp();
 
         $data = array(
             'nomor_nota'     => $nomor_nota,
@@ -75,7 +77,7 @@ class PenjualanController extends REST_Controller
                 $respon['message'] = "berhasil menambahkan data";
                 $respon['data'] = $data;
                 $this->response($respon, 200);
-            }else{
+            } else {
                 $respon['status'] = true;
                 $respon['message'] = "berhasil menambahkan data";
                 $respon['data'] = $data;
@@ -87,21 +89,20 @@ class PenjualanController extends REST_Controller
             $respon['data'] = $data;
             $this->response($respon, 500);
         }
-        
     }
 
     //memperbarui data penjualan
     function index_put()
     {
-         $request = json_decode(file_get_contents("php://input"));
-         var_dump($request);
-         die();
+
         $id = $this->put('id_penjualan');
         $data = array(
             'nomor_nota'     => $this->post('nomor_nota'),
             'subtotal'     => $this->post('subtotal'),
             'tanggal'      => $this->post('tanggal')
         );
+
+
         $put = $this->penjualan->put($data, $id);
         if ($put) {
             $respon['status'] = true;
