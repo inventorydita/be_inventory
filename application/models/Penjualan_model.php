@@ -19,7 +19,6 @@ class Penjualan_model extends CI_Model
         $this->db->select('*');
         $this->db->from('penjualan');
         $this->db->join('master_barang', 'master_barang.id_barang = penjualan.id_barang');
-        $this->db->where('penjualan.id_penjualan', $id);
         $data = $this->db->get();
         return $data;
     }
@@ -48,6 +47,10 @@ class Penjualan_model extends CI_Model
     {
         $insert = $this->db->insert($this->table, $data);
         return $insert;
+    }
+    //bulk insert
+    function bulk_insert($data){
+        return $this->db->insert_batch('detail_penjualan',$data);
     }
 
     //untuk menghapus data
