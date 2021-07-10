@@ -38,52 +38,64 @@ class PenjualanController extends REST_Controller
     //mengirim atau menambah data penjualan
     function index_post()
     {
-        $this->load->helper('form', 'url');
-        $this->load->library('form_validation');
+        //AMBIL DATA JSON DARI REQUEST(EXFRONT END)
+        $request = json_decode(file_get_contents("php://input"));
+        $date = new DateTime();
+        //ambil data penjualan
+        $id_penjualan = $date->getTimestamp();
+        $nomor_nota = $request->nomor_nota;
+        $tanggal = date("Y-m-d H:i:s");
+        $subtotal = $request->subtotal;
+        $detail_penjualan = $request->detail_penjualan;
 
-        $this->form_validation->set_rules('nomor_nota', 'Nomor Nota', 'required');
-        $this->form_validation->set_rules('subtotal', 'Subtotal', 'required');
-        $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
-
-
-        if ($this->form_validation->run() == FALSE) {
-            $this->response(array('status' => 'fail,isi sesuai format', 502));
+        $data = array(
+            'nomor_nota'     => $nomor_nota,
+            'subtotal'     => $subtotal,
+            'tanggal'      => $tanggal,
+            'id_penjualan' => $id_penjualan
+        );
+        $insert = $this->penjualan->post($data);
+        if ($insert) {
+            $final_data = [];
+            //masukkan masing-masing data ke object untuk ke database
+            foreach ($detail_penjualan as $detail) {
+                array_push(
+                    $final_data,
+                    array(
+                        'id_penjualan' => $id_penjualan,
+                        'id_barang' => $detail->id_barang,
+                        'harga_jual' => $detail->harga_jual,
+                        'quantity' => $detail->quantity
+                    )
+                );
+            }
+            $insert_detail = $this->penjualan->bulk_insert($final_data);
+            if ($insert_detail) {
+                $respon['status'] = true;
+                $respon['message'] = "berhasil menambahkan data";
+                $respon['data'] = $data;
+                $this->response($respon, 200);
+            }else{
+                $respon['status'] = true;
+                $respon['message'] = "berhasil menambahkan data";
+                $respon['data'] = $data;
+                $this->response($respon, 200);
+            }
         } else {
-            $data = array(
-                'nomor_nota'     => $this->post('nomor_nota'),
-                'subtotal'     => $this->post('subtotal'),
-                'tanggal'      => $this->post('tanggal')
-            );
-            $insert = $this->penjualan->post($data);
-            if ($insert) {
-                $respon['status'] = true;
-                $respon['message'] = "berhasil menambahkan data";
-                $respon['data'] = $data;
-                $this->response($respon, 200);
-            } else {
-                $respon['status'] = false;
-                $respon['message'] = "gagal menambahkan data";
-                $respon['data'] = $data;
-                $this->response($respon, 500);
-            }
-            $insert = $this->detail_penjualan->post($data);
-            if ($insert) {
-                $respon['status'] = true;
-                $respon['message'] = "berhasil menambahkan data";
-                $respon['data'] = $data;
-                $this->response($respon, 200);
-            } else {
-                $respon['status'] = false;
-                $respon['message'] = "gagal menambahkan data";
-                $respon['data'] = $data;
-                $this->response($respon, 500);
-            }
+            $respon['status'] = false;
+            $respon['message'] = "gagal menambahkan data";
+            $respon['data'] = $data;
+            $this->response($respon, 500);
         }
+        
     }
 
     //memperbarui data penjualan
     function index_put()
     {
+         $request = json_decode(file_get_contents("php://input"));
+         var_dump($request);
+         die();
         $id = $this->put('id_penjualan');
         $data = array(
             'nomor_nota'     => $this->post('nomor_nota'),
