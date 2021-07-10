@@ -44,7 +44,7 @@ class StokBarangController extends REST_Controller
         $this->form_validation->set_rules('id_barang', 'ID Barang', 'required');
         $this->form_validation->set_rules('id_pemasok', 'ID Pemasok', 'required');
         $this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
-        $this->form_validation->set_rules('harga_beli', 'Harga Beli', 'required');
+        $this->form_validation->set_rules('harga_modal', 'Harga Modal', 'required');
         $this->form_validation->set_rules('stok', 'Stok', 'required');
 
         if ($this->form_validation->run() == FALSE) {
@@ -52,10 +52,10 @@ class StokBarangController extends REST_Controller
         } else {
             $data = array(
                 'id_barang'    => $this->post('id_barang'),
-                'id_pemasok'  => $this->post('id_pemasok'),
-                'harga_jual'  => $this->post('harga_jual'),
-                'harga_beli'  => $this->post('harga_beli'),
-                'stok'  => $this->post('stok')
+                'id_pemasok'   => $this->post('id_pemasok'),
+                'harga_jual'   => $this->post('harga_jual'),
+                'harga_modal'  => $this->post('harga_modal'),
+                'stok'         => $this->post('stok')
             );
             $insert = $this->stok_barang->post($data);
             if ($insert) {
@@ -80,7 +80,7 @@ class StokBarangController extends REST_Controller
             'id_barang'   => $this->post('id_barang'),
             'id_pemasok'  => $this->post('id_pemasok'),
             'harga_jual'  => $this->post('harga_jual'),
-            'harga_beli'  => $this->post('harga_beli'),
+            'harga_modal'  => $this->post('harga_modal'),
             'stok'        => $this->post('stok')
         );
         $put = $this->stok_barang->put($data, $id);
