@@ -42,16 +42,17 @@ class Pembelian_model extends CI_Model
         return $update;
     }
 
-
     //untuk menambah data
     function post($data)
     {
         $insert = $this->db->insert($this->table, $data);
         return $insert;
     }
+
     //menyimpan banyak barang sekaligus
-    function bulk_insert($data){
-        return $this->db->insert_batch('detail_pembelian',$data);
+    function bulk_insert($data)
+    {
+        return $this->db->insert_batch('detail_pembelian', $data);
     }
 
     //untuk menghapus data

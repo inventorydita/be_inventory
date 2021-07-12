@@ -77,11 +77,11 @@ class StokBarangController extends REST_Controller
     {
         $id = $this->put('id_stok_barang');
         $data = array(
-            'id_barang'   => $this->post('id_barang'),
-            'id_pemasok'  => $this->post('id_pemasok'),
-            'harga_jual'  => $this->post('harga_jual'),
-            'harga_modal'  => $this->post('harga_modal'),
-            'stok'        => $this->post('stok')
+            'id_barang'   => $this->put('id_barang'),
+            'id_pemasok'  => $this->put('id_pemasok'),
+            'harga_jual'  => $this->put('harga_jual'),
+            'harga_modal'  => $this->put('harga_modal'),
+            'stok'        => $this->put('stok')
         );
         $put = $this->stok_barang->put($data, $id);
         if ($put) {

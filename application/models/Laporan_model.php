@@ -15,7 +15,7 @@ class Laporan_model extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->from('penjualan');
-		$this->db->join('master_barang', 'master_barang.id_barang = penjualan.id_barang');
+		//$this->db->join('master_barang', 'master_barang.id_pembelian = penjualan.id_pembelian');
 		$data = $this->db->get();
 		return $data;
 	}
@@ -24,7 +24,7 @@ class Laporan_model extends CI_Model
 	{
 		$this->db->select('*');
 		$this->db->from('penjualan');
-		$this->db->join('master_barang', 'master_barang.id_barang = penjualan.id_barang');
+		//$this->db->join('master_barang', 'master_barang.id_barang = penjualan.id_barang');
 		$this->db->where('nama column tanggal dari >=', $from_date);
 		$this->db->where('nama column tanggal sampai <=', $to_date);
 		$data =  $this->db->get($this->table);

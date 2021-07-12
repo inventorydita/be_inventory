@@ -97,9 +97,9 @@ class PenjualanController extends REST_Controller
 
         $id = $this->put('id_penjualan');
         $data = array(
-            'nomor_nota'     => $this->post('nomor_nota'),
-            'subtotal'     => $this->post('subtotal'),
-            'tanggal'      => $this->post('tanggal')
+            'nomor_nota'     => $this->put('nomor_nota'),
+            'subtotal'     => $this->put('subtotal'),
+            'tanggal'      => $this->put('tanggal')
         );
 
 

@@ -6,8 +6,6 @@ require APPPATH . '/libraries/REST_Controller.php';
 
 use Restserver\Libraries\REST_Controller;
 
-use function PHPSTORM_META\type;
-
 class PembelianController extends REST_Controller
 {
 
@@ -40,62 +38,51 @@ class PembelianController extends REST_Controller
     //mengirim atau menambah data pembelian
     function index_post()
     {
-        //AMBIL DATA JSON DARI REQUEST(EXFRONT END)
-        $request = json_decode(file_get_contents("php://input"));
-        $date = new DateTime();
-        //ambil data pembelian
-        $nomor_nota = $request->nomor_nota;
-        $detail_pembelian = $request->detail_pembelian;
-        $subtotal = $request->subtotal;
-        $id_pemasok = $request->id_pemasok;
+        $this->load->helper('form', 'url');
+        $this->load->library('form_validation');
 
-        $id_pembelian = $date->getTimestamp();
-        $tanggal =  date("Y-m-d H:i:s");
+        $this->form_validation->set_rules('nomor_nota', 'Nomor Nota', 'required');
+        $this->form_validation->set_rules('id_pemasok', 'Pemasok', 'required');
+        $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
+        $this->form_validation->set_rules('subtotal', 'Subtotal', 'required');
 
 
-        //  var_dump($id_pemasok);
-        //ambil data detail pembelian
 
-        //data yang disimpan ke db 
-        $data = array(
-            'id_pembelian' => $id_pembelian,
-            'nomor_nota'   => $nomor_nota,
-            'tanggal'      => $tanggal,
-            'subtotal'     => $subtotal,
-            'id_pemasok'   => $id_pemasok
-        );
-        $insert = $this->pembelian->post($data);
-        if ($insert) {
-            $final_data = [];
-            foreach ($detail_pembelian as $detail) {
-                array_push(
-                    $final_data,
-                    array(
-                        'id_barang' => $detail->id_barang,
-                        'harga_modal' => $detail->harga_modal,
-                        'harga_jual' => $detail->harga_jual,
-                        'quantity' => $detail->quantity,
-                        'id_pembelian' => $id_pembelian
-                    )
-                );
-            }
-            $insert_detail_pembelian = $this->pembelian->bulk_insert($final_data);
-            if ($insert_detail_pembelian) {
+        if ($this->form_validation->run() == FALSE) {
+            $this->response(array('status' => 'fail,isi sesuai format', 502));
+        } else {
+            $data = array(
+                'nomor_nota'   => $this->post('nomor_nota'),
+                'id_pemasok'   => $this->post('id_pemasok'),
+                'tanggal'      => $this->post('tanggal'),
+                'subtotal'     => $this->post('subtotal')
+            );
+            $insert = $this->pembelian->post($data);
+            if ($insert) {
                 $respon['status'] = true;
                 $respon['message'] = "berhasil menambahkan data";
                 $respon['data'] = $data;
                 $this->response($respon, 200);
             } else {
                 $respon['status'] = false;
-                $respon['message'] = "gagal menambahkan data detail";
+                $respon['message'] = "gagal menambahkan data";
                 $respon['data'] = $data;
                 $this->response($respon, 500);
             }
-        } else {
-            $respon['status'] = false;
-            $respon['message'] = "gagal menambahkan data";
-            $respon['data'] = $data;
-            $this->response($respon, 500);
+
+            //detail pembelian
+            $insert = $this->detail_pembelian->post($data);
+            if ($insert) {
+                $respon['status'] = true;
+                $respon['message'] = "berhasil menambahkan data";
+                $respon['data'] = $data;
+                $this->response($respon, 200);
+            } else {
+                $respon['status'] = false;
+                $respon['message'] = "gagal menambahkan data";
+                $respon['data'] = $data;
+                $this->response($respon, 500);
+            }
         }
     }
 
@@ -104,10 +91,10 @@ class PembelianController extends REST_Controller
     {
         $id = $this->put('id_pembelian');
         $data = array(
-            'nomor_nota'   => $this->post('nomor_nota'),
-            'id_pemasok'   => $this->post('id_pemasok'),
-            'tanggal'      => $this->post('tanggal'),
-            'subtotal'     => $this->post('subtotal')
+            'nomor_nota'   => $this->put('nomor_nota'),
+            'id_pemasok'   => $this->put('id_pemasok'),
+            'tanggal'      => $this->put('tanggal'),
+            'subtotal'     => $this->put('subtotal')
         );
         $put = $this->pembelian->put($data, $id);
         if ($put) {
