@@ -13,7 +13,7 @@ class MasterBarangController extends REST_Controller
     {
         parent::__construct($config);
         $this->load->database();
-        $this->load->model('Barang_model', 'barang');
+        $this->load->model('Barang_model', 'master_barang');
     }
 
     //Menampilkan data master barang
@@ -48,11 +48,13 @@ class MasterBarangController extends REST_Controller
         $harga_modal = $request->harga_modal;
         $harga_jual = $request->harga_jual;
 
+
         $data = array(
             'nama_barang' => $nama_barang,
             'id_satuan' => $id_satuan,
             'harga_modal' => $harga_modal,
             'harga_jual' => $harga_jual,
+            'kode_barang'   => $this->master_barang->kode_barang()
         );
         //proses simpan data
         $insert = $this->master_barang->post($data);
@@ -82,15 +84,13 @@ class MasterBarangController extends REST_Controller
         $harga_jual = $request->harga_jual;
 
         $id = $request->id_barang;
-        $kode_barang = $request->kode_barang;
         $data = array(
             'nama_barang' => $nama_barang,
             'id_satuan' => $id_satuan,
             'harga_modal' => $harga_modal,
-            'harga_jual' => $harga_jual,
-            'kode_barang'   => $kode_barang
+            'harga_jual' => $harga_jual
         );
-        $put = $this->barang->put($data, $id);
+        $put = $this->master_barang->put($data, $id);
         if ($put) {
             $respon['status'] = true;
             $respon['message'] = "berhasil mengubah data";

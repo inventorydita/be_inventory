@@ -19,7 +19,9 @@ class LaporanController extends REST_Controller
     //Menampilkan laporan
     function index_get()
     {
-        $id = $this->get('id_penjualan');
+        /*$id = $this->get('id_penjualan');
+        //pdf
+        
         if ($id == '') {
             $tokodita = $this->laporan->get_all()->result();
             $respon['status'] = true;
@@ -32,7 +34,10 @@ class LaporanController extends REST_Controller
             $respon['message'] = "gagal menampilkan laporan";
             $respon['data'] = $tokodita;
             $this->response($respon, 500);
-        }
+        } */
+        $this->load->library('pdf');
+        $html = $this->load->view('GeneratePdfView', [], true);
+        $this->pdf->createPDF($html, 'mypdf', false);
     }
 
     //menambah data laporan
