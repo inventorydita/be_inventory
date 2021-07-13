@@ -52,7 +52,7 @@ class MasterBarangController extends REST_Controller
             'nama_barang' => $nama_barang,
             'id_satuan' => $id_satuan,
             'harga_modal' => $harga_modal,
-            'harga_jual' => $harga_jual
+            'harga_jual' => $harga_jual,
         );
         //proses simpan data
         $insert = $this->master_barang->post($data);
@@ -72,13 +72,23 @@ class MasterBarangController extends REST_Controller
     //memperbarui data master barang/edit
     function index_put()
     {
-        $id = $this->put('id_barang');
+        //Ambil data JSON dari request(exfront end)
+        $request = json_decode(file_get_contents("php://input"));
+
+        //Ambil data barang
+        $nama_barang = $request->nama_barang;
+        $id_satuan = $request->id_satuan;
+        $harga_modal = $request->harga_modal;
+        $harga_jual = $request->harga_jual;
+
+        $id = $request->id_barang;
+        $kode_barang = $request->kode_barang;
         $data = array(
-            'nama_barang'   => $this->put('nama_barang'),
-            'id_satuan'     => $this->put('id_satuan'),
-            'harga_modal'   => $this->put('harga_modal'),
-            'harga_jual'    => $this->put('harga_jual'),
-            'kode_barang'   => $this->barang->kode_barang()
+            'nama_barang' => $nama_barang,
+            'id_satuan' => $id_satuan,
+            'harga_modal' => $harga_modal,
+            'harga_jual' => $harga_jual,
+            'kode_barang'   => $kode_barang
         );
         $put = $this->barang->put($data, $id);
         if ($put) {

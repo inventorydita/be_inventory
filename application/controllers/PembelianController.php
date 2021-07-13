@@ -101,34 +101,54 @@ class PembelianController extends REST_Controller
     //memperbarui data pembelian
     function index_put()
     {
-        $id = $this->put('id_pembelian');
+        //Ambil data JSON dari request(exfront end)
+        $request = json_decode(file_get_contents("php://input"));
+
+        //ambil data pembelian
+        $nomor_nota = $request->nomor_nota;
+        $detail_pembelian = $request->detail_pembelian;
+        $subtotal = $request->subtotal;
+        $id_pemasok = $request->id_pemasok;
+
+        $id_pembelian = $request->id_pembelian;
+        $tanggal =  date("Y-m-d H:i:s");
+
         $data = array(
-            'nomor_nota'   => $this->put('nomor_nota'),
-            'id_pemasok'   => $this->put('id_pemasok'),
-            'tanggal'      => $this->put('tanggal'),
-            'subtotal'     => $this->put('subtotal')
+            'nomor_nota'   => $nomor_nota,
+            'tanggal'      => $tanggal,
+            'subtotal'     => $subtotal,
+            'id_pemasok'   => $id_pemasok
         );
-        $put = $this->pembelian->put($data, $id);
+        $put = $this->pembelian->put($data, $id_pembelian);
         if ($put) {
-            $respon['status'] = true;
-            $respon['message'] = "berhasil mengubah data";
-            $respon['data'] = $data;
-            $this->response($respon, 200);
+            $final_data = [];
+            foreach ($detail_pembelian as $detail) {
+                array_push(
+                    $final_data,
+                    array(
+                        'id_barang' => $detail->id_barang,
+                        'harga_modal' => $detail->harga_modal,
+                        'harga_jual' => $detail->harga_jual,
+                        'quantity' => $detail->quantity,
+                        'id_pembelian' => $id_pembelian
+                    )
+                );
+            }
+            $update_detail_pembelian = $this->pembelian->bulk_insert($final_data);
+            if ($update_detail_pembelian) {
+                $respon['status'] = true;
+                $respon['message'] = "berhasil menambahkan data";
+                $respon['data'] = $data;
+                $this->response($respon, 200);
+            } else {
+                $respon['status'] = false;
+                $respon['message'] = "gagal menambahkan data detail";
+                $respon['data'] = $data;
+                $this->response($respon, 500);
+            }
         } else {
             $respon['status'] = false;
             $respon['message'] = "gagal mengubah data";
-            $respon['data'] = $data;
-            $this->response($respon, 500);
-        }
-        $put = $this->detail_pembelian->put($data, $id);
-        if ($put) {
-            $respon['status'] = true;
-            $respon['message'] = "berhasil menambahkan data";
-            $respon['data'] = $data;
-            $this->response($respon, 200);
-        } else {
-            $respon['status'] = false;
-            $respon['message'] = "gagal menambahkan data";
             $respon['data'] = $data;
             $this->response($respon, 500);
         }

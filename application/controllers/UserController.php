@@ -73,13 +73,21 @@ class UserController extends REST_Controller
     //memperbarui data user
     function index_put()
     {
-        $id = $this->put('id_user');
+        //Ambil data JSON dari request(exfront end)
+        $request = json_decode(file_get_contents("php://input"));
+
+        //Ambil data user
+        $username = $request->username;
+        $email = $request->email;
+        $password = $request->password;
+        $level = $request->level;
+
+        $id = $request->id_user;
         $data = array(
-            'id_user'    => $this->put('id_user'),
-            'username'   => $this->put('username'),
-            'email'      => $this->put('email'),
-            'password'   => $this->put('password'),
-            'level'      => $this->put('level')
+            'username'   => $username,
+            'email'      => $email,
+            'password'   => $password,
+            'level'      => $level
         );
         $put = $this->user->put($data, $id);
         if ($put) {
