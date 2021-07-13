@@ -71,13 +71,22 @@ class PemasokController extends REST_Controller
     //memperbarui data master pemasok
     function index_put()
     {
-        $id = $this->put('id_pemasok');
+        //Ambil data JSON dari request(exfront end)
+        $request = json_decode(file_get_contents("php://input"));
+
+        //ammbil data pemasok
+        $nama_pemasok = $request->nama_pemasok;
+        $alamat = $request->alamat;
+        $kota = $request->kota;
+        $telepon = $request->telepon;
+
+
+        $id = $request->id_pemasok;
         $data = array(
-            'id_pemasok'     => $this->put('id_pemasok'),
-            'nama_pemasok'   => $this->put('nama_pemasok'),
-            'alamat'         => $this->put('alamat'),
-            'kota'           => $this->put('kota'),
-            'telepon'        => $this->put('telepon')
+            'nama_pemasok'  => $nama_pemasok,
+            'alamat'        => $alamat,
+            'kota'          => $kota,
+            'telepon'       => $telepon
         );
         $put = $this->pemasok->put($data, $id);
         if ($put) {

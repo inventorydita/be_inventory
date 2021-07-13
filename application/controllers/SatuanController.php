@@ -66,10 +66,15 @@ class SatuanController extends REST_Controller
     //memperbarui data master satuan
     function index_put()
     {
-        $id = $this->put('id_satuan');
+        //Ambil data JSON dari request(exfront end)
+        $request = json_decode(file_get_contents("php://input"));
+
+        //ambil data satuan
+        $nama_satuan = $request->nama_satuan;
+
+        $id = $request->id_satuan;
         $data = array(
-            'id_satuan'    => $this->put('id_satuan'),
-            'nama_satuan'  => $this->put('nama_satuan')
+            'nama_satuan'  => $nama_satuan
         );
         $put = $this->satuan->put($data, $id);
         if ($put) {

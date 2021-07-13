@@ -48,7 +48,6 @@ class PenjualanController extends REST_Controller
         $subtotal = $request->subtotal;
         $detail_penjualan = $request->detail_penjualan;
 
-
         $tanggal = date("Y-m-d H:i:s");
         $id_penjualan = $date->getTimestamp();
 
@@ -96,33 +95,50 @@ class PenjualanController extends REST_Controller
     //memperbarui data penjualan
     function index_put()
     {
+        //Ambil data JSON dari request(exfront end)
+        $request = json_decode(file_get_contents("php://input"));
 
-        $id = $this->put('id_penjualan');
+        //ambil data penjualan
+        $nomor_nota = $request->nomor_nota;
+        $subtotal = $request->subtotal;
+        $detail_penjualan = $request->detail_penjualan;
+
+        $id_penjualan = $request->id_penjualan;
+        $tanggal = date("Y-m-d H:i:s");
+
         $data = array(
-            'nomor_nota'     => $this->put('nomor_nota'),
-            'subtotal'     => $this->put('subtotal'),
-            'tanggal'      => $this->put('tanggal')
+            'nomor_nota'    => $nomor_nota,
+            'subtotal'     => $subtotal,
+            'tanggal'      => $tanggal,
+            'id_penjualan' => $id_penjualan
         );
-
-
-        $put = $this->penjualan->put($data, $id);
+        $put = $this->penjualan->put($data, $id_penjualan);
         if ($put) {
-            $respon['status'] = true;
-            $respon['message'] = "berhasil mengubah data";
-            $respon['data'] = $data;
-            $this->response($respon, 200);
-        } else {
-            $respon['status'] = false;
-            $respon['message'] = "gagal mengubah data";
-            $respon['data'] = $data;
-            $this->response($respon, 500);
-        }
-        $put = $this->detail_penjualan->put($data, $id);
-        if ($put) {
-            $respon['status'] = true;
-            $respon['message'] = "berhasil mengubah data";
-            $respon['data'] = $data;
-            $this->response($respon, 200);
+            $final_data = [];
+            //masukkan masing-masing data ke object untuk ke database
+            foreach ($detail_penjualan as $detail) {
+                array_push(
+                    $final_data,
+                    array(
+                        'id_penjualan' => $id_penjualan,
+                        'id_barang' => $detail->id_barang,
+                        'harga_jual' => $detail->harga_jual,
+                        'quantity' => $detail->quantity
+                    )
+                );
+            }
+            $update_detail_penjualan = $this->penjualan->bulk_insert($final_data);
+            if ($update_detail_penjualan) {
+                $respon['status'] = true;
+                $respon['message'] = "berhasil menambahkan data";
+                $respon['data'] = $data;
+                $this->response($respon, 200);
+            } else {
+                $respon['status'] = false;
+                $respon['message'] = "gagal mengubah data";
+                $respon['data'] = $data;
+                $this->response($respon, 500);
+            }
         } else {
             $respon['status'] = false;
             $respon['message'] = "gagal mengubah data";

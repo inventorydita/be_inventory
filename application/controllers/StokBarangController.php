@@ -71,13 +71,21 @@ class StokBarangController extends REST_Controller
     //memperbarui data master stok_barang
     function index_put()
     {
-        $id = $this->put('id_stok_barang');
+        //Ambil data JSON dari request(exfront end)
+        $request = json_decode(file_get_contents("php://input"));
+
+        //Ambil data stokbarang    
+        $id_pemasok = $request->id_pemasok;
+        $harga_jual = $request->harga_jual;
+        $harga_modal = $request->harga_modal;
+        $stok = $request->stok;
+
+        $id = $request->id_stok_barang;
         $data = array(
-            'id_barang'   => $this->put('id_barang'),
-            'id_pemasok'  => $this->put('id_pemasok'),
-            'harga_jual'  => $this->put('harga_jual'),
-            'harga_modal'  => $this->put('harga_modal'),
-            'stok'        => $this->put('stok')
+            'id_pemasok'   => $id_pemasok,
+            'harga_jual'   => $harga_jual,
+            'harga_modal'  => $harga_modal,
+            'stok'         => $stok
         );
         $put = $this->stok_barang->put($data, $id);
         if ($put) {
