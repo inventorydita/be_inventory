@@ -63,6 +63,7 @@ class PembelianController extends REST_Controller
             'subtotal'     => $subtotal,
             'id_pemasok'   => $id_pemasok
         );
+        //proses simpan data
         $insert = $this->pembelian->post($data);
         if ($insert) {
             $final_data = [];
