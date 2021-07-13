@@ -25,38 +25,37 @@ class UserController extends REST_Controller
             $respon['status'] = true;
             $respon['message'] = "berhasil menampilkan semua data";
             $respon['data'] = $tokodita;
+            $this->response($respon, 200);
         } else {
             $this->db->where('id', $id);
             $tokodita = $this->db->get_by_id('user')->result();
             $respon['status'] = true;
             $respon['message'] = "berhasil menampilkan semua data";
             $respon['data'] = $tokodita;
+            $this->response($respon, 500);
         }
-        $this->response($respon, 200);
     }
 
     //mengirim atau menambah data user
     function index_post()
     {
-        /* $this->load->helper(array('form', 'url'));
-        $this->load->library('form_validation');
+        //Ambil data JSON dari request(exfront end)
+        $request = json_decode(file_get_contents("php://input"));
 
-        $this->form_validation->set_rules('username', 'Username', 'required');
-        $this->form_validation->set_rules('email', 'Email', 'required');
-        $this->form_validation->set_rules('password', 'Password', 'required', array('required' => 'You must provide a %s.'));
-        $this->form_validation->set_rules('level', 'Level', 'required');
+        //Ambil data user
+        $username = $request->username;
+        $email = $request->email;
+        $password = $request->password;
+        $level = $request->level;
 
-
-        if ($this->form_validation->run() == FALSE) {
-            $this->response(array('status' => 'fail, isi sesuai format', 502));
-        } else {*/
         $data = array(
-            'id_user'    => $this->post('id_user'),
-            'username'   => $this->post('username'),
-            'email'      => $this->post('email'),
-            'password'   => $this->post('password'),
-            'level'      => $this->post('level')
+            'username'   => $username,
+            'email'      => $email,
+            'password'   => $password,
+            'level'      => $level
         );
+
+        //proses simpan data
         $insert = $this->user->post($data);
         if ($insert) {
             $respon['status'] = true;
@@ -69,8 +68,6 @@ class UserController extends REST_Controller
             $respon['data'] = $data;
             $this->response($respon, 500);
         }
-
-        //}
     }
 
     //memperbarui data user

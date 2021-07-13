@@ -26,56 +26,46 @@ class SatuanController extends REST_Controller
             $respon['status'] = true;
             $respon['message'] = "berhasil menampilkan semua data";
             $respon['data'] = $tokodita;
+            $this->response($respon, 200);
         } else {
             $tokodita = $this->db->get_by_id('satuan')->result();
             $respon['status'] = false;
             $respon['message'] = "gagal menampilkan semua data";
             $respon['data'] = $tokodita;
+            $this->response($respon, 500);
         }
-        $this->response($respon, 500);
     }
 
     //mengirim atau menambah data satuan
     function index_post()
     {
-        $this->load->helper('form', 'url');
-        $this->load->library('form_validation');
+        //Ambil data JSON dari request(exfront end)
+        $request = json_decode(file_get_contents("php://input"));
 
-        $this->form_validation->set_rules('nama_satuan', 'Nama Satuan', 'required');
+        //ambil data satuan
+        $nama_satuan = $request->nama_satuan;
 
-        if ($this->form_validation->run() == FALSE) {
-            $this->response(array('status' => 'fail,isi sesuai format', 502));
+        $data = array(
+            'nama_satuan'  => $nama_satuan
+        );
+
+        $insert = $this->satuan->post($data);
+        if ($insert) {
+            $respon['status'] = true;
+            $respon['message'] = "berhasil menambahkan data";
+            $respon['data'] = $data;
+            $this->response($respon, 200);
         } else {
-            $data = array(
-                'id_satuan'    => $this->post('id_satuan'),
-                'nama_satuan'  => $this->post('nama_satuan')
-            );
-            $insert = $this->satuan->post($data);
-            if ($insert) {
-                $respon['status'] = true;
-                $respon['message'] = "berhasil menambahkan data";
-                $respon['data'] = $data;
-                $this->response($respon, 200);
-            } else {
-                $respon['status'] = false;
-                $respon['message'] = "gagal menambahkan data";
-                $respon['data'] = $data;
-                $this->response($respon, 500);
-            }
+            $respon['status'] = false;
+            $respon['message'] = "gagal menambahkan data";
+            $respon['data'] = $data;
+            $this->response($respon, 500);
         }
     }
 
     //memperbarui data master satuan
     function index_put()
     {
-        /*$this->load->helper('form', 'url');
-        $this->load->library('form_validation');
-
-        $this->form_validation->set_rules('nama_satuan', 'Nama Satuan', 'required');
-
-        if ($this->form_validation->run() == FALSE) {
-            $this->response(array('status' => 'fail,isi sesuai format', 502));
-        } else { */
         $id = $this->put('id_satuan');
         $data = array(
             'id_satuan'    => $this->put('id_satuan'),
@@ -93,13 +83,11 @@ class SatuanController extends REST_Controller
             $respon['data'] = $data;
             $this->response($respon, 500);
         }
-        //}
     }
 
     //menghapus salah satu data satuan
     function index_delete()
     {
-
         $id = $this->delete('id_satuan');
         $this->db->where('id_satuan', $id);
         $delete = $this->satuan->delete($id);

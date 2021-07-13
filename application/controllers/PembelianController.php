@@ -6,8 +6,6 @@ require APPPATH . '/libraries/REST_Controller.php';
 
 use Restserver\Libraries\REST_Controller;
 
-use function PHPSTORM_META\type;
-
 class PembelianController extends REST_Controller
 {
 
@@ -27,14 +25,15 @@ class PembelianController extends REST_Controller
             $respon['status'] = true;
             $respon['message'] = "berhasil mengambil semua data";
             $respon['data'] = $tokodita;
+            $this->response($respon, 200);
         } else {
             $this->db->where('id', $id);
             $tokodita = $this->db->get_by_id('pembelian')->result();
             $respon['status'] = false;
             $respon['message'] = "gagal mengambil semua data";
             $respon['data'] = $tokodita;
+            $this->response($respon, 500);
         }
-        $this->response($respon, 200);
     }
 
     //mengirim atau menambah data pembelian
@@ -104,10 +103,10 @@ class PembelianController extends REST_Controller
     {
         $id = $this->put('id_pembelian');
         $data = array(
-            'nomor_nota'   => $this->post('nomor_nota'),
-            'id_pemasok'   => $this->post('id_pemasok'),
-            'tanggal'      => $this->post('tanggal'),
-            'subtotal'     => $this->post('subtotal')
+            'nomor_nota'   => $this->put('nomor_nota'),
+            'id_pemasok'   => $this->put('id_pemasok'),
+            'tanggal'      => $this->put('tanggal'),
+            'subtotal'     => $this->put('subtotal')
         );
         $put = $this->pembelian->put($data, $id);
         if ($put) {

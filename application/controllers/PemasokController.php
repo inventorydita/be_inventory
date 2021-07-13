@@ -25,65 +25,52 @@ class PemasokController extends REST_Controller
             $respon['status'] = true;
             $respon['message'] = "berhasil mengambil semua data";
             $respon['data'] = $tokodita;
+            $this->response($respon, 200);
         } else {
             $tokodita = $this->db->get_by_id('pemasok')->result();
             $respon['status'] = false;
             $respon['message'] = "gagal mengambil semua data";
             $respon['data'] = $tokodita;
+            $this->response($respon, 500);
         }
-        $this->response($respon, 200);
     }
 
     //mengirim atau menambah data pemasok baru
     function index_post()
     {
-        $this->load->helper('form', 'url');
-        $this->load->library('form_validation');
+        //Ambil data JSON dari request(exfront end)
+        $request = json_decode(file_get_contents("php://input"));
 
-        $this->form_validation->set_rules('nama_pemasok', 'Nama Pemasok', 'required');
-        $this->form_validation->set_rules('alamat', 'Alamat', 'required');
-        $this->form_validation->set_rules('kota', 'Kota', 'required');
-        $this->form_validation->set_rules('telepon', 'Telepon', 'required');
+        //Ambil data pemasok
+        $nama_pemasok = $request->nama_pemasok;
+        $alamat = $request->alamat;
+        $kota = $request->kota;
+        $telepon = $request->telepon;
 
-        if ($this->form_validation->run() == FALSE) {
-            $this->response(array('status' => 'fail,isi sesuai format', 502));
+        $data = array(
+            'nama_pemasok'  => $nama_pemasok,
+            'alamat'        => $alamat,
+            'kota'          => $kota,
+            'telepon'       => $telepon
+        );
+        //proses simpan data
+        $insert = $this->pemasok->post($data);
+        if ($insert) {
+            $respon['status'] = true;
+            $respon['message'] = "berhasil menambahkan data";
+            $respon['data'] = $data;
+            $this->response($respon, 200);
         } else {
-            $data = array(
-                'id_pemasok'    => $this->post('id_pemasok'),
-                'nama_pemasok'  => $this->post('nama_pemasok'),
-                'alamat'        => $this->post('alamat'),
-                'kota'          => $this->post('kota'),
-                'telepon'       => $this->post('telepon')
-            );
-            $insert = $this->pemasok->post($data);
-            if ($insert) {
-                $respon['status'] = true;
-                $respon['message'] = "berhasil menambahkan data";
-                $respon['data'] = $data;
-                $this->response($respon, 200);
-            } else {
-                $respon['status'] = false;
-                $respon['message'] = "gagal menambahkan data";
-                $respon['data'] = $data;
-                $this->response($respon, 500);
-            }
+            $respon['status'] = false;
+            $respon['message'] = "gagal menambahkan data";
+            $respon['data'] = $data;
+            $this->response($respon, 500);
         }
     }
 
     //memperbarui data master pemasok
     function index_put()
     {
-        /*$this->load->helper('form', 'url');
-        $this->load->library('form_validation');
-
-        $this->form_validation->set_rules('nama_pemasok', 'Nama Pemasok', 'required');
-        $this->form_validation->set_rules($this->put('alamat'), 'Alamat', 'required');
-        $this->form_validation->set_rules('kota', 'Kota', 'required');
-        $this->form_validation->set_rules('telepon', 'Telepon', 'required');
-
-        if ($this->form_validation->run() == FALSE) {
-            $this->response(array('status' => 'fail,isi sesuai format', 502));
-        } else {*/
         $id = $this->put('id_pemasok');
         $data = array(
             'id_pemasok'     => $this->put('id_pemasok'),
@@ -104,7 +91,6 @@ class PemasokController extends REST_Controller
             $respon['data'] = $data;
             $this->response($respon, 500);
         }
-        //} 
     }
 
 
