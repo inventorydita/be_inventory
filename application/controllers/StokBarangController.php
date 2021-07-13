@@ -19,56 +19,52 @@ class StokBarangController extends REST_Controller
     //Menampilkan data stok barang
     function index_get()
     {
-
         $id = $this->get('id_stok_barang');
         if ($id == '') {
             $tokodita = $this->stok_barang->get_all()->result();
             $respon['status'] = true;
             $respon['message'] = "berhasil menampilkan semua data";
             $respon['data'] = $tokodita;
+            $this->response($respon, 200);
         } else {
             $tokodita = $this->db->get_by_id('stok_barang')->result();
             $respon['status'] = false;
             $respon['message'] = "gagal menampilkan semua data";
             $respon['data'] = $tokodita;
+            $this->response($respon, 500);
         }
-        $this->response($respon, 500);
     }
 
     //mengirim atau menambah data stok barang
     function index_post()
     {
-        $this->load->helper('form', 'url');
-        $this->load->library('form_validation');
+        //Ambil data JSON dari request(exfront end)
+        $request = json_decode(file_get_contents("php://input"));
 
-        $this->form_validation->set_rules('id_barang', 'ID Barang', 'required');
-        $this->form_validation->set_rules('id_pemasok', 'ID Pemasok', 'required');
-        $this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
-        $this->form_validation->set_rules('harga_modal', 'Harga Modal', 'required');
-        $this->form_validation->set_rules('stok', 'Stok', 'required');
+        //Ambil data stokbarang
+        $id_pemasok = $request->id_pemasok;
+        $harga_jual = $request->harga_jual;
+        $harga_modal = $request->harga_modal;
+        $stok = $request->stok;
 
-        if ($this->form_validation->run() == FALSE) {
-            $this->response(array('status' => 'fail,isi sesuai format', 502));
+        $data = array(
+            'id_pemasok'   => $id_pemasok,
+            'harga_jual'   => $harga_jual,
+            'harga_modal'  => $harga_modal,
+            'stok'         => $stok
+        );
+        //proses simpan data
+        $insert = $this->stok_barang->post($data);
+        if ($insert) {
+            $respon['status'] = true;
+            $respon['message'] = "berhasil menambahkan data";
+            $respon['data'] = $data;
+            $this->response($respon, 200);
         } else {
-            $data = array(
-                'id_barang'    => $this->post('id_barang'),
-                'id_pemasok'   => $this->post('id_pemasok'),
-                'harga_jual'   => $this->post('harga_jual'),
-                'harga_modal'  => $this->post('harga_modal'),
-                'stok'         => $this->post('stok')
-            );
-            $insert = $this->stok_barang->post($data);
-            if ($insert) {
-                $respon['status'] = true;
-                $respon['message'] = "berhasil menambahkan data";
-                $respon['data'] = $data;
-                $this->response($respon, 200);
-            } else {
-                $respon['status'] = false;
-                $respon['message'] = "gagal menambahkan data";
-                $respon['data'] = $data;
-                $this->response($respon, 500);
-            }
+            $respon['status'] = false;
+            $respon['message'] = "gagal menambahkan data";
+            $respon['data'] = $data;
+            $this->response($respon, 500);
         }
     }
 

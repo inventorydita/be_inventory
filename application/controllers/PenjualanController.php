@@ -25,14 +25,15 @@ class PenjualanController extends REST_Controller
             $respon['status'] = true;
             $respon['message'] = "berhasil menampilkan semua data";
             $respon['data'] = $tokodita;
+            $this->response($respon, 200);
         } else {
             $this->db->where('id', $id);
             $tokodita = $this->db->get_by_id('penjualan')->result();
             $respon['status'] = false;
             $respon['message'] = "gagal menampilkan semua data";
             $respon['data'] = $tokodita;
+            $this->response($respon, 500);
         }
-        $this->response($respon, 200);
     }
 
     //mengirim atau menambah data penjualan
@@ -41,6 +42,7 @@ class PenjualanController extends REST_Controller
         //AMBIL DATA JSON DARI REQUEST(EXFRONT END)
         $request = json_decode(file_get_contents("php://input"));
         $date = new DateTime();
+
         //ambil data penjualan
         $nomor_nota = $request->nomor_nota;
         $subtotal = $request->subtotal;
@@ -78,10 +80,10 @@ class PenjualanController extends REST_Controller
                 $respon['data'] = $data;
                 $this->response($respon, 200);
             } else {
-                $respon['status'] = true;
-                $respon['message'] = "berhasil menambahkan data";
+                $respon['status'] = false;
+                $respon['message'] = "gagal menambahkan data";
                 $respon['data'] = $data;
-                $this->response($respon, 200);
+                $this->response($respon, 500);
             }
         } else {
             $respon['status'] = false;
@@ -143,7 +145,7 @@ class PenjualanController extends REST_Controller
             $respon['status'] = false;
             $respon['message'] = "gagal menghapus data";
             $respon['data'] = $delete;
-            $this->response($respon, 200);
+            $this->response($respon, 500);
         }
         $id = $this->delete('id_detail_penjualan');
         $delete = $this->detail_penjualan->delete($id);
@@ -156,7 +158,7 @@ class PenjualanController extends REST_Controller
             $respon['status'] = false;
             $respon['message'] = "gagal menghapus data";
             $respon['data'] = $delete;
-            $this->response($respon, 200);
+            $this->response($respon, 500);
         }
     }
 

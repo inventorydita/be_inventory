@@ -18,10 +18,18 @@ class LoginController extends REST_Controller
 
     function index_post()
     {
-        $username   = $this->post('username');
-        $password   = $this->post('password');
+        //AMBIL DATA JSON DARI REQUEST(EXFRONT END)
+        $request = json_decode(file_get_contents("php://input"));
 
-        $insert = $this->user->cek_login($username, $password);
+        //ambil data 
+        $username   = $request->username;
+        $password   = $request->password;
+
+        $data = array(
+            'username' => $username,
+            'password' => $password
+        );
+        $insert = $this->user->post($data);
         if ($insert) {
             $respon['status'] = true;
             $respon['message'] = "berhasil menambahkan data";

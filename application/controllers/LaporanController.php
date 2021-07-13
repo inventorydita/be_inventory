@@ -19,46 +19,47 @@ class LaporanController extends REST_Controller
     //Menampilkan laporan
     function index_get()
     {
-
         $id = $this->get('id_penjualan');
         if ($id == '') {
             $tokodita = $this->laporan->get_all()->result();
             $respon['status'] = true;
             $respon['message'] = "berhasil menampilkan laporan";
             $respon['data'] = $tokodita;
+            $this->response($respon, 200);
         } else {
             $tokodita = $this->db->get_by_id('penjualan')->result();
             $respon['status'] = false;
             $respon['message'] = "gagal menampilkan laporan";
             $respon['data'] = $tokodita;
+            $this->response($respon, 500);
         }
-        $this->response($respon, 500);
     }
+
+    //menambah data laporan
     function index_post()
     {
-        $this->load->helper('form', 'url');
-        $this->load->library('form_validation');
+        //Ambil data JSON dari request(exfront end)
+        $request = json_decode(file_get_contents("php://input"));
 
-        $this->form_validation->set_rules('tanggal', 'Tanggal', 'required');
+        //ambil data laporan
+        $id_penjualan = $request->id_penjualan;
+        //$tanggal = date("Y-m-d H:i:s");
 
-        if ($this->form_validation->run() == FALSE) {
-            $this->response(array('status' => 'fail,isi sesuai format', 502));
+        $data = array(
+            'id_penjualan'  => $id_penjualan
+        );
+        //proses simpan data
+        $insert = $this->laporan->post($data);
+        if ($insert) {
+            $respon['status'] = true;
+            $respon['message'] = "berhasil menampilkan laporan";
+            $respon['data'] = $data;
+            $this->response($respon, 200);
         } else {
-            $data = array(
-                'tanggal'      => $this->post('tanggal')
-            );
-            $insert = $this->laporan->post($data);
-            if ($insert) {
-                $respon['status'] = true;
-                $respon['message'] = "berhasil menampilkan laporan";
-                $respon['data'] = $data;
-                $this->response($respon, 200);
-            } else {
-                $respon['status'] = false;
-                $respon['message'] = "gagal menampilkan laporan";
-                $respon['data'] = $data;
-                $this->response($respon, 500);
-            }
+            $respon['status'] = false;
+            $respon['message'] = "gagal menampilkan laporan";
+            $respon['data'] = $data;
+            $this->response($respon, 500);
         }
     }
 }

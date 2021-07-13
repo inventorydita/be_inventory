@@ -42,7 +42,7 @@ class Pemasok_model extends CI_Model
     //untuk menambah data
     function post($data)
     {
-        $insert = $this->db->insert_batch($this->table, $data);
+        $insert = $this->db->insert($this->table, $data);
         return $insert;
     }
 

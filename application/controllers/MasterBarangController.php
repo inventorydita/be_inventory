@@ -25,50 +25,47 @@ class MasterBarangController extends REST_Controller
             $respon['status'] = true;
             $respon['message'] = "berhasil mengambil semua data";
             $respon['data'] = $tokodita;
+            $this->response($respon, 200);
         } else {
             $this->db->where('id', $id);
             $tokodita = $this->db->get_by_id()->result();
             $respon['status'] = false;
             $respon['message'] = "gagal mengambil semua data";
             $respon['data'] = $tokodita;
+            $this->response($respon, 500);
         }
-        $this->response($respon, 200);
     }
 
     //mengirim atau menambah data master barang baru
     function index_post()
     {
-        $this->load->helper('form', 'php');
-        $this->load->library('form_validation');
+        //Ambil data JSON dari request(exfront end)
+        $request = json_decode(file_get_contents("php://input"));
 
-        $this->form_validation->set_rules('nama_barang', 'Nama Barang', 'required');
-        $this->form_validation->set_rules('id_satuan', 'Satuan', 'required');
-        $this->form_validation->set_rules('harga_modal', 'Harga Modal', 'required');
-        $this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required');
-        $this->form_validation->set_rules('kode_barang', 'Kode Barang', 'required');
+        //Ambil data barang
+        $nama_barang = $request->nama_barang;
+        $id_satuan = $request->id_satuan;
+        $harga_modal = $request->harga_modal;
+        $harga_jual = $request->harga_jual;
 
-        if ($this->form_validation->run() == FALSE) {
-            $this->response(array('status' => 'fail,isi sesuai format', 502));
+        $data = array(
+            'nama_barang' => $nama_barang,
+            'id_satuan' => $id_satuan,
+            'harga_modal' => $harga_modal,
+            'harga_jual' => $harga_jual
+        );
+        //proses simpan data
+        $insert = $this->master_barang->post($data);
+        if ($insert) {
+            $respon['status'] = true;
+            $respon['message'] = "berhasil menambahkan data";
+            $respon['data'] = $data;
+            $this->response($respon, 200);
         } else {
-            $data = array(
-                'nama_barang'   => $this->post('nama_barang'),
-                'id_satuan'     => $this->post('id_satuan'),
-                'harga_modal'   => $this->post('harga_modal'),
-                'harga_jual'    => $this->post('harga_jual'),
-                'kode_barang'   => $this->barang->kode_barang()
-            );
-            $insert = $this->barang->post($data);
-            if ($insert) {
-                $respon['status'] = true;
-                $respon['message'] = "berhasil menambahkan data";
-                $respon['data'] = $data;
-                $this->response($respon, 200);
-            } else {
-                $respon['status'] = false;
-                $respon['message'] = "gagal menambahkan data";
-                $respon['data'] = $data;
-                $this->response($respon, 500);
-            }
+            $respon['status'] = false;
+            $respon['message'] = "gagal menambahkan data";
+            $respon['data'] = $data;
+            $this->response($respon, 500);
         }
     }
 
@@ -106,12 +103,14 @@ class MasterBarangController extends REST_Controller
             $respon['status'] = true;
             $respon['message'] = "berhasil mengubah data";
             $respon['data'] = $delete;
-            $this->response(array('status' => 'success'), 201);
+            $this->response($respon, 200);
+            //$this->response(array('status' => 'success'), 201);
         } else {
             $respon['status'] = false;
             $respon['message'] = "gagal mengubah data";
             $respon['data'] = $delete;
-            $this->response(array('status' => 'fail', 502));
+            $this->response($respon, 500);
+            //$this->response(array('status' => 'fail', 502));
         }
     }
 
