@@ -25,21 +25,17 @@ class LoginController extends REST_Controller
         $username   = $request->username;
         $password   = $request->password;
 
-        $data = array(
-            'username' => $username,
-            'password' => $password
-        );
-        $insert = $this->user->post($data);
-        if ($insert) {
+        $cek = $this->user->cek_login($username,$password);
+        if (count($cek->result()) > 0) {
             $respon['status'] = true;
             $respon['message'] = "berhasil menambahkan data";
-            $respon['data'] = $insert->result();
+            $respon['data'] = $cek->result();
             $this->response($respon, 200);
         } else {
             $respon['status'] = false;
             $respon['message'] = "gagal menambahkan data";
-            $respon['data'] = $insert->result();
-            $this->response($respon, 500);
+            $respon['data'] = null;
+            $this->response($respon, 400);
         }
     }
 }
