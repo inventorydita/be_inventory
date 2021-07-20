@@ -13,7 +13,7 @@ class MasterBarangController extends REST_Controller
     {
         parent::__construct($config);
         $this->load->database();
-        $this->load->model('Barang_model', 'master_barang');
+        $this->load->model('Barang_model', 'barang');
     }
 
     //Menampilkan data master barang
