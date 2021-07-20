@@ -18,6 +18,7 @@ class Stokbarang_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('stok_barang');
+        $this->db->join('master_barang', 'master_barang.id_barang = stok_barang.id_barang');
         $data = $this->db->get();
         return $data;
     }
