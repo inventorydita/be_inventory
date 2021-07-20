@@ -19,25 +19,26 @@ class LaporanController extends REST_Controller
     //Menampilkan laporan
     function index_get()
     {
-        /*$id = $this->get('id_penjualan');
-        //pdf
-        
-        if ($id == '') {
-            $tokodita = $this->laporan->get_all()->result();
+        /* $this->load->library('pdf');
+        $html = $this->load->view('GeneratePdfView', [], true);
+        $this->pdf->createPDF($html, 'mypdf', false); */
+
+        $daritanggal = $this->get('daritanggal');
+        $sampaitanggal = $this->get('sampaitanggal');
+        //var_dump($daritanggal);
+        //die();
+        $data = $this->laporan->get_by_date($daritanggal, $sampaitanggal);
+        if ($data) {
             $respon['status'] = true;
             $respon['message'] = "berhasil menampilkan laporan";
-            $respon['data'] = $tokodita;
+            $respon['data'] = $data->result();
             $this->response($respon, 200);
         } else {
-            $tokodita = $this->db->get_by_id('penjualan')->result();
             $respon['status'] = false;
             $respon['message'] = "gagal menampilkan laporan";
-            $respon['data'] = $tokodita;
+            $respon['data'] = $data;
             $this->response($respon, 500);
-        } */
-        $this->load->library('pdf');
-        $html = $this->load->view('GeneratePdfView', [], true);
-        $this->pdf->createPDF($html, 'mypdf', false);
+        }
     }
 
     //menambah data laporan
