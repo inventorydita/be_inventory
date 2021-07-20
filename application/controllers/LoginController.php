@@ -33,7 +33,7 @@ class LoginController extends REST_Controller
             $this->response($respon, 200);
         } else {
             $respon['status'] = false;
-            $respon['message'] = "gagal menambahkan data";
+            $respon['message'] = "user tidak ditemukan";
             $respon['data'] = null;
             $this->response($respon, 400);
         }
