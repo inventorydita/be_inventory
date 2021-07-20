@@ -561,7 +561,8 @@ $config['allowed_cors_headers'] = [
   'Content-Type',
   'Accept',
   'Access-Control-Request-Method',
-	'Access-Control-Allow-Origin'
+	'Access-Control-Allow-Origin',
+	'Access-Control-Allow-Headers'
 ];
 
 /*
