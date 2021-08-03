@@ -159,7 +159,6 @@ class PembelianController extends REST_Controller
     function index_delete()
     {
         $id = $this->delete('id_pembelian');
-        $this->db->where('id_pembelian', $id);
         $delete = $this->pembelian->delete($id);
         if ($delete) {
             $respon['status'] = true;
