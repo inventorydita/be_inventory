@@ -163,7 +163,7 @@ class PenjualanController extends REST_Controller
             $respon['data'] = $delete;
             $this->response($respon, 500);
         }
-        $id = $this->delete('id_detail_penjualan');
+        /* $id = $this->delete('id_detail_penjualan');
         $delete = $this->detail_penjualan->delete($id);
         if ($delete) {
             $respon['status'] = true;
@@ -175,7 +175,7 @@ class PenjualanController extends REST_Controller
             $respon['message'] = "gagal menghapus data";
             $respon['data'] = $delete;
             $this->response($respon, 500);
-        }
+        } */
     }
 
 

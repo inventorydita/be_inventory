@@ -172,7 +172,7 @@ class PembelianController extends REST_Controller
             $respon['data'] = $delete;
             $this->response($respon, 500);
         }
-        $id = $this->delete('id_detail_pembelian');
+        /*$id = $this->delete('id_detail_pembelian');
         $this->db->where('id_detail_pembelian', $id);
         $delete = $this->detail_pembelian->delete($id);
         if ($delete) {
@@ -185,7 +185,7 @@ class PembelianController extends REST_Controller
             $respon['message'] = "gagal menghapus data";
             $respon['data'] = $delete;
             $this->response($respon, 500);
-        }
+        }*/
     }
 
 
