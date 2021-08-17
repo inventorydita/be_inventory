@@ -32,7 +32,7 @@ class UserController extends REST_Controller
             $respon['status'] = true;
             $respon['message'] = "berhasil menampilkan semua data";
             $respon['data'] = $tokodita;
-            $this->response($respon, 500);
+            $this->response($respon, 200);
         }
     }
 
