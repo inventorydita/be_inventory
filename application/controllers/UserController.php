@@ -27,8 +27,8 @@ class UserController extends REST_Controller
             $respon['data'] = $tokodita;
             $this->response($respon, 200);
         } else {
-            $this->db->where('id', $id);
-            $tokodita = $this->db->get_by_id('user')->result();
+            //$this->db->where('id', $id);
+            $tokodita = $this->user->get_by_id($id)->result();
             $respon['status'] = true;
             $respon['message'] = "berhasil menampilkan semua data";
             $respon['data'] = $tokodita;

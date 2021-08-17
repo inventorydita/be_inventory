@@ -27,6 +27,7 @@ class Satuan_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('satuan');
+        $this->db->where('id_satuan', $id);
         $data = $this->db->get();
         return $data;
     }

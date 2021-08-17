@@ -27,8 +27,8 @@ class MasterBarangController extends REST_Controller
             $respon['data'] = $tokodita;
             $this->response($respon, 200);
         } else {
-            $this->db->where('id', $id);
-            $tokodita = $this->db->get_by_id()->result();
+            //$this->db->where('id', $id);
+            $tokodita = $this->barang->get_by_id($id)->result();
             $respon['status'] = false;
             $respon['message'] = "gagal mengambil semua data";
             $respon['data'] = $tokodita;

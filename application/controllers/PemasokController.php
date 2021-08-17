@@ -27,7 +27,7 @@ class PemasokController extends REST_Controller
             $respon['data'] = $tokodita;
             $this->response($respon, 200);
         } else {
-            $tokodita = $this->db->get_by_id('pemasok')->result();
+            $tokodita = $this->pemasok->get_by_id($id)->result();
             $respon['status'] = false;
             $respon['message'] = "gagal mengambil semua data";
             $respon['data'] = $tokodita;
