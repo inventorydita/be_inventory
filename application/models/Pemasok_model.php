@@ -27,6 +27,7 @@ class Pemasok_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('pemasok');
+        $this->db->where('id_pemasok', $id);
         $data = $this->db->get();
         return $data;
     }

@@ -29,6 +29,7 @@ class Stokbarang_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('stok_barang');
+        $this->db->where('id_stok_barang', $id);
         $data = $this->db->get();
         return $data;
     }

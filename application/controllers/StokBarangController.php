@@ -27,7 +27,7 @@ class StokBarangController extends REST_Controller
             $respon['data'] = $tokodita;
             $this->response($respon, 200);
         } else {
-            $tokodita = $this->db->get_by_id('stok_barang')->result();
+            $tokodita = $this->stok_barang->get_by_id($id)->result();
             $respon['status'] = false;
             $respon['message'] = "gagal menampilkan semua data";
             $respon['data'] = $tokodita;
