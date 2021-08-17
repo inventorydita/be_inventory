@@ -57,7 +57,7 @@ class MasterBarangController extends REST_Controller
             'kode_barang'   => $this->barang->kode_barang()
         );
         //proses simpan data
-        $insert = $this->master_barang->post($data);
+        $insert = $this->barang->post($data);
         if ($insert) {
             $respon['status'] = true;
             $respon['message'] = "berhasil menambahkan data";
@@ -90,7 +90,7 @@ class MasterBarangController extends REST_Controller
             'harga_modal' => $harga_modal,
             'harga_jual' => $harga_jual
         );
-        $put = $this->master_barang->put($data, $id);
+        $put = $this->barang->put($data, $id);
         if ($put) {
             $respon['status'] = true;
             $respon['message'] = "berhasil mengubah data";
