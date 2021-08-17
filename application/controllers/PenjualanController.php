@@ -29,10 +29,10 @@ class PenjualanController extends REST_Controller
         } else {
             //$this->db->where('id', $id);
             $tokodita = $this->penjualan->get_by_id($id)->result();
-            $respon['status'] = false;
-            $respon['message'] = "gagal menampilkan semua data";
+            $respon['status'] = true;
+            $respon['message'] = "berhasil menampilkan semua data";
             $respon['data'] = $tokodita;
-            $this->response($respon, 500);
+            $this->response($respon, 200);
         }
     }
 

@@ -28,10 +28,10 @@ class PemasokController extends REST_Controller
             $this->response($respon, 200);
         } else {
             $tokodita = $this->pemasok->get_by_id($id)->result();
-            $respon['status'] = false;
-            $respon['message'] = "gagal mengambil semua data";
+            $respon['status'] = true;
+            $respon['message'] = "berhasil mengambil semua data";
             $respon['data'] = $tokodita;
-            $this->response($respon, 500);
+            $this->response($respon, 200);
         }
     }
 
