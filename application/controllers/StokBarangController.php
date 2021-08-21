@@ -75,14 +75,14 @@ class StokBarangController extends REST_Controller
         $request = json_decode(file_get_contents("php://input"));
 
         //Ambil data stokbarang    
-        $id_pemasok = $request->id_pemasok;
+        $id_barang = $request->id_barang;
         $harga_jual = $request->harga_jual;
         $harga_modal = $request->harga_modal;
         $stok = $request->stok;
 
         $id = $request->id_stok_barang;
         $data = array(
-            'id_pemasok'   => $id_pemasok,
+            'id_barang'   => $id_barang,
             'harga_jual'   => $harga_jual,
             'harga_modal'  => $harga_modal,
             'stok'         => $stok
