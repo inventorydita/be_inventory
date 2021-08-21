@@ -105,10 +105,10 @@ class MasterBarangController extends REST_Controller
     }
 
     //menghapus salah satu data master barang
-    function index_delete()
+    function index_delete($id)
     {
-        $request = json_decode(file_get_contents("php://input"));
-        $id = $request->id_barang;
+        //$request = json_decode(file_get_contents("php://input"));
+        //$id = $request->id_barang;
         $delete = $this->barang->delete($id);
         if ($delete) {
             $respon['status'] = true;
