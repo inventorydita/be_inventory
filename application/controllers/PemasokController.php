@@ -106,8 +106,8 @@ class PemasokController extends REST_Controller
     //menghapus salah satu data pemasok
     function index_delete()
     {
-
-        $id = $this->delete('id_pemasok');
+        $request = json_decode(file_get_contents("php://input"));
+        $id = $request->id_pemasok;
         $delete = $this->pemasok->delete($id);
         if ($delete) {
             $respon['status'] = true;

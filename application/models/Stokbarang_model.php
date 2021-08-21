@@ -33,4 +33,19 @@ class Stokbarang_model extends CI_Model
         $data = $this->db->get();
         return $data;
     }
+
+     //untuk menambah data
+     function post($data)
+     {
+         $insert = $this->db->insert($this->table, $data);
+         return $insert;
+     }
+ 
+    //untuk menghapus data
+    function delete($id)
+    {
+        $this->db->where('id_stok_barang', $id);
+        $delete = $this->db->delete($this->table);
+        return $delete;
+    }
 }

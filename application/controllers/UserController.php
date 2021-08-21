@@ -106,7 +106,8 @@ class UserController extends REST_Controller
     //menghapus salah satu data user
     function index_delete()
     {
-        $id = $this->delete('id_user');
+        $request = json_decode(file_get_contents("php://input"));
+        $id = $request->id_user;
         $delete = $this->user->delete($id);
         if ($delete) {
             $respon['status'] = true;
