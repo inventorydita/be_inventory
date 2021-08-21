@@ -48,4 +48,12 @@ class Stokbarang_model extends CI_Model
         $delete = $this->db->delete($this->table);
         return $delete;
     }
+
+     //untuk mengedit data
+     function put($data, $id)
+     {
+         $this->db->where('id_stok_barang', $id);
+         $update = $this->db->update($this->table, $data);
+         return $update;
+     }
 }
