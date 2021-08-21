@@ -148,10 +148,10 @@ class PenjualanController extends REST_Controller
     }
 
     //menghapus salah satu data penjualan
-    function index_delete()
+    function index_delete($id)
     {
-        $request = json_decode(file_get_contents("php://input"));
-        $id = $request->id_penjualan;
+        //$request = json_decode(file_get_contents("php://input"));
+        //$id = $request->id_penjualan;
         $delete = $this->penjualan->delete($id);
         if ($delete) {
             $respon['status'] = true;

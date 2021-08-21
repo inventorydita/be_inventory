@@ -102,10 +102,10 @@ class StokBarangController extends REST_Controller
     }
 
     //menghapus salah satu data stok barang
-    function index_delete()
+    function index_delete($id)
     {
-        $request = json_decode(file_get_contents("php://input"));
-        $id = $request->id_stok_barang;
+       // $request = json_decode(file_get_contents("php://input"));
+       // $id = $request->id_stok_barang;
         //$id = $this->delete('id_stok_barang');
         //$this->db->where('id_stok_barang', $id);
         $delete = $this->stok_barang->delete($id);
