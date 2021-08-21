@@ -42,13 +42,13 @@ class StokBarangController extends REST_Controller
         $request = json_decode(file_get_contents("php://input"));
 
         //Ambil data stokbarang
-        $id_pemasok = $request->id_pemasok;
+        $id_barang = $request->id_barang;
         $harga_jual = $request->harga_jual;
         $harga_modal = $request->harga_modal;
         $stok = $request->stok;
 
         $data = array(
-            'id_pemasok'   => $id_pemasok,
+            'id_barang'   => $id_barang,
             'harga_jual'   => $harga_jual,
             'harga_modal'  => $harga_modal,
             'stok'         => $stok
@@ -104,8 +104,10 @@ class StokBarangController extends REST_Controller
     //menghapus salah satu data stok barang
     function index_delete()
     {
-        $id = $this->delete('id_stok_barang');
-        $this->db->where('id_stok_barang', $id);
+        $request = json_decode(file_get_contents("php://input"));
+        $id = $request->id_stok_barang;
+        //$id = $this->delete('id_stok_barang');
+        //$this->db->where('id_stok_barang', $id);
         $delete = $this->stok_barang->delete($id);
         if ($delete) {
             $respon['status'] = true;

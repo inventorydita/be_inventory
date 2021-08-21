@@ -93,8 +93,8 @@ class SatuanController extends REST_Controller
     //menghapus salah satu data satuan
     function index_delete()
     {
-        $id = $this->delete('id_satuan');
-        $this->db->where('id_satuan', $id);
+        $request = json_decode(file_get_contents("php://input"));
+        $id = $request->id_satuan;
         $delete = $this->satuan->delete($id);
         if ($delete) {
             $respon['status'] = true;

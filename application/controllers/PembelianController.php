@@ -158,7 +158,8 @@ class PembelianController extends REST_Controller
     //menghapus salah satu data pembelian
     function index_delete()
     {
-        $id = $this->delete('id_pembelian');
+        $request = json_decode(file_get_contents("php://input"));
+        $id = $request->id_pembelian;
         $delete = $this->pembelian->delete($id);
         if ($delete) {
             $respon['status'] = true;

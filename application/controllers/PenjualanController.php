@@ -107,7 +107,7 @@ class PenjualanController extends REST_Controller
         $tanggal = date("Y-m-d H:i:s");
 
         $data = array(
-            'nomor_nota'    => $nomor_nota,
+            'nomor_nota'   => $nomor_nota,
             'subtotal'     => $subtotal,
             'tanggal'      => $tanggal,
             'id_penjualan' => $id_penjualan
@@ -150,7 +150,8 @@ class PenjualanController extends REST_Controller
     //menghapus salah satu data penjualan
     function index_delete()
     {
-        $id = $this->delete('id_penjualan');
+        $request = json_decode(file_get_contents("php://input"));
+        $id = $request->id_penjualan;
         $delete = $this->penjualan->delete($id);
         if ($delete) {
             $respon['status'] = true;
