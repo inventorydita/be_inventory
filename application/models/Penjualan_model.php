@@ -39,6 +39,7 @@ class Penjualan_model extends CI_Model
         $list_yang_dibeli = $this->db->join('penjualan', 'penjualan.id_penjualan = detail_penjualan.id_penjualan');
         $list_yang_dibeli = $this->db->join('master_barang', 'master_barang.id_barang = detail_penjualan.id_barang');
         $list_yang_dibeli = $this->db->where('penjualan.id_penjualan', $id);
+        $list_yang_dibeli = $this->db->join('satuan', 'satuan.id_satuan = master_barang.id_satuan');
         $list_yang_dibeli = $this->db->get()->result();
 
         $data['penjualan'] = $penjualan;
