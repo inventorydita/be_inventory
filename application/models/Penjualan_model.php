@@ -27,9 +27,11 @@ class Penjualan_model extends CI_Model
     function get_by_id($id)
     {
         $this->db->select('*');
-        $this->db->from('penjualan');
-        $this->db->join('master_barang', 'master_barang.id_barang = penjualan.id_barang');
+        $this->db->from('detail_penjualan');
+        $this->db->join('penjualan', 'penjualan.id_penjualan = detail_penjualan.id_penjualan');
+        $this->db->join('master_barang', 'master_barang.id_barang = detail_penjualan.id_barang');
         $this->db->where('penjualan.id_penjualan', $id);
+    
         $data = $this->db->get();
         return $data;
     }
