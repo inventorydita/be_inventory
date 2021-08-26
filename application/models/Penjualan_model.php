@@ -26,13 +26,23 @@ class Penjualan_model extends CI_Model
     //untuk menampilkan data berdasarkan id
     function get_by_id($id)
     {
-        $this->db->select('*');
-        $this->db->from('detail_penjualan');
-        $this->db->join('penjualan', 'penjualan.id_penjualan = detail_penjualan.id_penjualan');
-        $this->db->join('master_barang', 'master_barang.id_barang = detail_penjualan.id_barang');
-        $this->db->where('penjualan.id_penjualan', $id);
-    
-        $data = $this->db->get();
+        //ambil data penjualannya
+        $penjualan = $this->db->select('*');
+        $penjualan = $this->db->from('penjualan');
+        $penjualan = $this->db->where('id_penjualan',$id);
+        $penjualan = $this->db->get()->result()
+
+
+        //ambil barang apa aja sih yang dibeli ?
+        $list_yang_dibeli = $this->db->select('*');
+        $list_yang_dibeli = $this->db->from('detail_penjualan');
+        $list_yang_dibeli = $this->db->join('penjualan', 'penjualan.id_penjualan = detail_penjualan.id_penjualan');
+        $list_yang_dibeli = $this->db->join('master_barang', 'master_barang.id_barang = detail_penjualan.id_barang');
+        $list_yang_dibeli = $this->db->where('penjualan.id_penjualan', $id);
+        $list_yang_dibeli = $this->db->get()->result();
+
+        $data['penjualan'] = $penjualan;
+        $data['barang_yang_dibeli'] = $list_yang_dibeli;
         return $data;
     }
 

@@ -28,7 +28,7 @@ class PenjualanController extends REST_Controller
             $this->response($respon, 200);
         } else {
             //$this->db->where('id', $id);
-            $tokodita = $this->penjualan->get_by_id($id)->result();
+            $tokodita = $this->penjualan->get_by_id($id);
             $respon['status'] = true;
             $respon['message'] = "berhasil menampilkan semua data";
             $respon['data'] = $tokodita;
