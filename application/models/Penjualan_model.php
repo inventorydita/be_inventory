@@ -29,7 +29,7 @@ class Penjualan_model extends CI_Model
         //ambil data penjualannya
         $penjualan = $this->db->select('*');
         $penjualan = $this->db->from('penjualan');
-        $penjualan = $this->db->where('id_penjualan',$id);
+        $penjualan = $this->db->where('id_penjualan',$id); 
         $penjualan = $this->db->get()->result();
 
 
