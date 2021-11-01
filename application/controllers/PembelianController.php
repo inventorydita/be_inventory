@@ -27,12 +27,13 @@ class PembelianController extends REST_Controller
             $respon['data'] = $tokodita;
             $this->response($respon, 200);
         } else {
-            //$this->db->where('id', $id);
             $tokodita = $this->pembelian->get_by_id($id)->result();
             $respon['status'] = true;
             $respon['message'] = "berhasil mengambil semua data";
             $respon['data'] = $tokodita;
+            $respon['barang_yang_dibeli'] = $this->pembelian->get_detail_pembelian($id)->result();
             $this->response($respon, 200);
+
         }
     }
 
@@ -190,5 +191,16 @@ class PembelianController extends REST_Controller
 
 
     //Masukan function selanjutnya disini
+    function search_get()
+    {
+        $nomor_nota = $this->get('nomor_nota');
+        //var_dump($nama);
+        //die();
+        $data = $this->pembelian->search($nomor_nota);
+        $respon['status'] = true;
+        $respon['message'] = "berhasil mengambil data";
+        $respon['data'] = $data->result();
+        $this->response($respon, 200);
+    }
 
 }

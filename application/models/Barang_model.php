@@ -79,4 +79,14 @@ class Barang_model extends CI_Model
     function stok_barang()
     {
     }
+
+    //function search
+    function search($katakunci)
+    {
+        $this->db->select('*');
+        $this->db->from('master_barang');
+        $this->db->like('nama_barang', $katakunci);
+        $data = $this->db->get();
+        return $data;
+    }
 }

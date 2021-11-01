@@ -23,6 +23,16 @@ class Pembelian_model extends CI_Model
         return $data;
     }
 
+    function get_detail_pembelian($id)
+    {
+        $this->db->select('*');
+        $this->db->from('detail_pembelian');
+        $this->db->join('pembelian','pembelian.id_pembelian = detail_pembelian.id_pembelian');
+        $this->db->join('master_barang', 'master_barang.id_barang = detail_pembelian.id_barang');
+        $this->db->where('pembelian.id_pembelian',$id);
+        $data = $this->db->get();
+        return $data;
+    }
     //untuk menampilkan data berdasarkan id
     function get_by_id($id)
     {
@@ -61,5 +71,15 @@ class Pembelian_model extends CI_Model
         $this->db->where('id_pembelian', $id);
         $delete = $this->db->delete($this->table);
         return $delete;
+    }
+
+    //search
+    function search($katakunci)
+    {
+        $this->db->select('*');
+        $this->db->from('pembelian');
+        $this->db->like('nomor_nota', $katakunci);
+        $data = $this->db->get();
+        return $data;
     }
 }

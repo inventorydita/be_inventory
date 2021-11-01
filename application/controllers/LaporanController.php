@@ -68,4 +68,5 @@ class LaporanController extends REST_Controller
             $this->response($respon, 500);
         }
     }
+
 }

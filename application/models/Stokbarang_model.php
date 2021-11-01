@@ -56,4 +56,14 @@ class Stokbarang_model extends CI_Model
          $update = $this->db->update($this->table, $data);
          return $update;
      }
+
+     function search($katakunci)
+     {
+         $this->db->select('*');
+         $this->db->from('master_barang');
+         $this->db->join('satuan', 'satuan.id_satuan = master_barang.id_satuan');
+         $this->db->like('master_barang.nama_barang', $katakunci);
+         $data = $this->db->get();
+         return $data;
+     }
 }
