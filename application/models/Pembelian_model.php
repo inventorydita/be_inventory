@@ -27,8 +27,8 @@ class Pembelian_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('detail_pembelian');
-        $this->db->join('pembelian','pembelian.id_pembelian = detail_pembelian.id_detail_pembelian');
-        $this->db->join('master_barang', 'master_barang.id_barang = detail_pembelian.id_detail+pembelian');
+        $this->db->join('pembelian','pembelian.id_pembelian = detail_pembelian.id_pembelian');
+        $this->db->join('master_barang', 'master_barang.id_barang = detail_pembelian.id_barang');
         $this->db->where('pembelian.id_pembelian',$id);
         $data = $this->db->get();
         return $data;
