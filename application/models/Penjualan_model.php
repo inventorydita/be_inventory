@@ -74,4 +74,14 @@ class Penjualan_model extends CI_Model
         $delete = $this->db->delete($this->table);
         return $delete;
     }
+
+    //search
+    function search($katakunci)
+    {
+        $this->db->select('*');
+        $this->db->from('penjualan');
+        $this->db->like('nomor_nota', $katakunci);
+        $data = $this->db->get();
+        return $data;
+    }
 }

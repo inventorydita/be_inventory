@@ -3,10 +3,10 @@
 
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Satuan_model extends CI_Model
+class Todolist_model extends CI_Model
 {
-    public $table = 'satuan';
-    public $id = 'id_satuan';
+    public $table = 'todolist';
+    public $id = 'id_todolist';
 
     function __construct()
     {
@@ -17,7 +17,7 @@ class Satuan_model extends CI_Model
     function get_all()
     {
         $this->db->select('*');
-        $this->db->from('satuan');
+        $this->db->from('todolist');
         $data = $this->db->get();
         return $data;
     }
@@ -26,8 +26,8 @@ class Satuan_model extends CI_Model
     function get_by_id($id)
     {
         $this->db->select('*');
-        $this->db->from('satuan');
-        $this->db->where('id_satuan', $id);
+        $this->db->from('todolist');
+        $this->db->where('id_todolist', $id);
         $data = $this->db->get();
         return $data;
     }
@@ -35,7 +35,14 @@ class Satuan_model extends CI_Model
     //untuk mengedit data
     function put($data, $id)
     {
-        $this->db->where('id_satuan', $id);
+        $this->db->where('id_todolist', $id);
+        $update = $this->db->update($this->table, $data);
+        return $update;
+    }
+
+    function selesai_put($data, $id)
+    {
+        $this->db->where('id_todolist', $id);
         $update = $this->db->update($this->table, $data);
         return $update;
     }
@@ -50,18 +57,9 @@ class Satuan_model extends CI_Model
     //untuk menghapus data
     function delete($id)
     {
-        $this->db->where('id_satuan', $id);
+        $this->db->where('id_todolist', $id);
         $delete = $this->db->delete($this->table);
         return $delete;
     }
 
-    //search
-    function search($katakunci)
-    {
-        $this->db->select('*');
-        $this->db->from('satuan');
-        $this->db->like('nama_satuan', $katakunci);
-        $data = $this->db->get();
-        return $data;
-    }
 }

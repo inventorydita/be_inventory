@@ -54,4 +54,13 @@ class Pemasok_model extends CI_Model
         $delete = $this->db->delete($this->table);
         return $delete;
     }
+
+    function search($katakunci)
+    {
+        $this->db->select('*');
+        $this->db->from('pemasok');
+        $this->db->like('nama_pemasok', $katakunci);
+        $data = $this->db->get();
+        return $data;
+    }
 }

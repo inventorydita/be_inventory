@@ -124,5 +124,14 @@ class StokBarangController extends REST_Controller
 
 
     //Masukan function selanjutnya disini
+    function search_get()
+    {
+        $nama = $this->get('nama_barang');
+        $data = $this->stok_barang->search($nama);
+        $respon['status'] = true;
+        $respon['message'] = "berhasil mengambil data";
+        $respon['data'] = $data->result();
+        $this->response($respon, 200);
+    }
 
 }

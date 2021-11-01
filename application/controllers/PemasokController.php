@@ -126,5 +126,16 @@ class PemasokController extends REST_Controller
 
 
     //Masukan function selanjutnya disini
+    function search_get()
+    {
+        $nama = $this->get('nama_pemasok');
+        //var_dump($nama);
+        //die();
+        $data = $this->pemasok->search($nama);
+        $respon['status'] = true;
+        $respon['message'] = "berhasil mengambil data";
+        $respon['data'] = $data->result();
+        $this->response($respon, 200);
+    }
 
 }

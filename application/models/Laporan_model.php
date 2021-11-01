@@ -26,10 +26,12 @@ class Laporan_model extends CI_Model
 	function get_by_date($from_date, $to_date)
 	{
 		$this->db->select('*');
-		//$this->db->from('penjualan');
-		//$this->db->join('master_barang', 'master_barang.id_barang = penjualan.id_barang');
-		$this->db->where('tanggal >=', $from_date);
-		$this->db->where('tanggal <=', $to_date);
+		$this->db->from('detail_penjualan');
+		$this->db->join('penjualan as p', 'p.id_penjualan = detail_penjualan.id_penjualan');
+		$this->db->join('master_barang', 'master_barang.id_barang = detail_penjualan.id_barang');
+		$this->db->join('satuan', 'satuan.id_satuan = master_barang.id_satuan');
+		$this->db->where('p.tanggal >=', $from_date);
+		$this->db->where('p.tanggal <=', $to_date);
 		$data =  $this->db->get($this->table);
 		return $data;
 	}

@@ -190,5 +190,15 @@ class PembelianController extends REST_Controller
 
 
     //Masukan function selanjutnya disini
-
+    function search_get()
+    {
+        $nomor_nota = $this->get('nomor_nota');
+        //var_dump($nama);
+        //die();
+        $data = $this->pembelian->search($nomor_nota);
+        $respon['status'] = true;
+        $respon['message'] = "berhasil mengambil data";
+        $respon['data'] = $data->result();
+        $this->response($respon, 200);
+    }
 }

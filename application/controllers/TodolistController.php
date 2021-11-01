@@ -6,58 +6,52 @@ require APPPATH . '/libraries/REST_Controller.php';
 
 use Restserver\Libraries\REST_Controller;
 
-class MasterBarangController extends REST_Controller
+class TodolistController extends REST_Controller
 {
 
     function __construct($config = 'rest')
     {
         parent::__construct($config);
         $this->load->database();
-        $this->load->model('Barang_model', 'barang');
+        $this->load->model('Todolist_model', 'todolist');
     }
 
-    //Menampilkan data master barang
+    //Menampilkan data Todolist
     function index_get()
     {
-        $id = $this->get('id_barang');
+
+        $id = $this->get('id_todolist');
         if ($id == '') {
-            $tokodita = $this->barang->get_all()->result();
+            $tokodita = $this->todolist->get_all()->result();
             $respon['status'] = true;
-            $respon['message'] = "berhasil mengambil semua data";
+            $respon['message'] = "berhasil menampilkan semua data";
             $respon['data'] = $tokodita;
             $this->response($respon, 200);
         } else {
-            //$this->db->where('id', $id);
-            $tokodita = $this->barang->get_by_id($id)->result();
+            $tokodita = $this->todolist->get_by_id($id)->result();
             $respon['status'] = true;
-            $respon['message'] = "berhasil mengambil semua data";
+            $respon['message'] = "berhasil menampilkan semua data";
             $respon['data'] = $tokodita;
             $this->response($respon, 200);
         }
     }
 
-    //mengirim atau menambah data master barang baru
+    //mengirim atau menambah data Todolist
     function index_post()
     {
         //Ambil data JSON dari request(exfront end)
         $request = json_decode(file_get_contents("php://input"));
 
-        //Ambil data barang
-        $nama_barang = $request->nama_barang;
-        $id_satuan = $request->id_satuan;
-        $harga_modal = $request->harga_modal;
-        $harga_jual = $request->harga_jual;
-
+        //ambil data Todolist
+        $nama = $request->nama;
+        $selesai = 0;
 
         $data = array(
-            'nama_barang' => $nama_barang,
-            'id_satuan' => $id_satuan,
-            'harga_modal' => $harga_modal,
-            'harga_jual' => $harga_jual,
-            'kode_barang'   => $this->barang->kode_barang()
+            'nama'  => $nama,
+            'selesai' => $selesai
         );
-        //proses simpan data
-        $insert = $this->barang->post($data);
+
+        $insert = $this->todolist->post($data);
         if ($insert) {
             $respon['status'] = true;
             $respon['message'] = "berhasil menambahkan data";
@@ -71,26 +65,20 @@ class MasterBarangController extends REST_Controller
         }
     }
 
-    //memperbarui data master barang/edit
+    //memperbarui data master Todolist
     function index_put()
     {
         //Ambil data JSON dari request(exfront end)
         $request = json_decode(file_get_contents("php://input"));
 
-        //Ambil data barang
-        $nama_barang = $request->nama_barang;
-        $id_satuan = $request->id_satuan;
-        $harga_modal = $request->harga_modal;
-        $harga_jual = $request->harga_jual;
-
-        $id = $request->id_barang;
+        //ambil data Todolist
+        $nama = $request->nama;
+        
+        $id = $request->id_todolist;
         $data = array(
-            'nama_barang' => $nama_barang,
-            'id_satuan' => $id_satuan,
-            'harga_modal' => $harga_modal,
-            'harga_jual' => $harga_jual
+            'nama'  => $nama
         );
-        $put = $this->barang->put($data, $id);
+        $put = $this->todolist->put($data, $id);
         if ($put) {
             $respon['status'] = true;
             $respon['message'] = "berhasil mengubah data";
@@ -104,36 +92,52 @@ class MasterBarangController extends REST_Controller
         }
     }
 
-    //menghapus salah satu data master barang
+    function selesai_put()
+    {
+        $request = json_decode(file_get_contents("php://input"));
+
+        //ambil data Todolist
+       
+        $selesai = 1;
+        
+        $id = $request->id_todolist;
+        $data = array(
+            'selesai' => $selesai
+        );
+        $selesai_put = $this->todolist->selesai_put($data, $id);
+        if ($selesai_put) {
+            $respon['status'] = true;
+            $respon['message'] = "berhasil mengubah data";
+            $respon['data'] = $data;
+            $this->response($respon, 200);
+        } else {
+            $respon['status'] = false;
+            $respon['message'] = "gagal mengubah data";
+            $respon['data'] = $data;
+            $this->response($respon, 500);
+        }
+    }
+
+    //menghapus salah satu data Todolist
     function index_delete($id)
     {
         //$request = json_decode(file_get_contents("php://input"));
-        //$id = $request->id_barang;
-        $delete = $this->barang->delete($id);
+        //$id = $request->id_Todolist;
+        $delete = $this->todolist->delete($id);
         if ($delete) {
             $respon['status'] = true;
             $respon['message'] = "berhasil menghapus data";
             $respon['data'] = $delete;
             $this->response($respon, 200);
-            //$this->response(array('status' => 'success'), 201);
         } else {
             $respon['status'] = false;
             $respon['message'] = "gagal menghapus data";
             $respon['data'] = $delete;
             $this->response($respon, 500);
-            //$this->response(array('status' => 'fail', 502));
         }
     }
 
 
     //Masukan function selanjutnya disini
-    function search_get()
-    {
-        $nama = $this->get('nama_barang');
-        $data = $this->barang->search($nama);
-        $respon['status'] = true;
-        $respon['message'] = "berhasil mengambil data";
-        $respon['data'] = $data->result();
-        $this->response($respon, 200);
-    }
+ 
 }
