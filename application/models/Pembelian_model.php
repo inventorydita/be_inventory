@@ -33,6 +33,10 @@ class Pembelian_model extends CI_Model
         $data = $this->db->get();
         return $data;
     }
+    //menghapus detail pembelian
+    function delete_detail_pembelian($id_pembelian){
+        return $this->db->delete('detail_pembelian', array('id_pembelian' => $id_pembelian));
+    }
     //untuk menampilkan data berdasarkan id
     function get_by_id($id)
     {

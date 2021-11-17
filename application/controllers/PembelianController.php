@@ -106,48 +106,63 @@ class PembelianController extends REST_Controller
         //Ambil data JSON dari request(exfront end)
         $request = json_decode(file_get_contents("php://input"));
 
-        //ambil data pembelian
+        //ambil data pembelian json request
         $nomor_nota = $request->nomor_nota;
         $detail_pembelian = $request->detail_pembelian;
         $subtotal = $request->subtotal;
         $id_pemasok = $request->id_pemasok;
-
         $id_pembelian = $request->id_pembelian;
         $tanggal =  date("Y-m-d H:i:s");
 
+        //siapkan data pembelian yang akan di update
         $data = array(
             'nomor_nota'   => $nomor_nota,
             'tanggal'      => $tanggal,
             'subtotal'     => $subtotal,
             'id_pemasok'   => $id_pemasok
         );
+        //proses update
         $put = $this->pembelian->put($data, $id_pembelian);
+
+        //jika update pembelian berhasil maka lanjut update detail pembelian
         if ($put) {
-            $final_data = [];
-            foreach ($detail_pembelian as $detail) {
-                array_push(
-                    $final_data,
-                    array(
-                        'id_barang' => $detail->id_barang,
-                        'harga_modal' => $detail->harga_modal,
-                        'harga_jual' => $detail->harga_jual,
-                        'quantity' => $detail->quantity,
-                        'id_pembelian' => $id_pembelian
-                    )
-                );
-            }
-            $update_detail_pembelian = $this->pembelian->bulk_insert($final_data);
-            if ($update_detail_pembelian) {
-                $respon['status'] = true;
-                $respon['message'] = "berhasil menambahkan data";
-                $respon['data'] = $data;
-                $this->response($respon, 200);
-            } else {
+            
+            //hapus data detail pembelian dengan id_pembelian yang diupdate 
+            $delete_detail_pembelian = $this->pembelian->delete_detail_pembelian($id_pembelian);
+            if($delete_detail_pembelian){
+
+                $final_data = [];
+                foreach ($detail_pembelian as $detail) {
+                    array_push(
+                        $final_data,
+                        array(
+                            'id_barang' => $detail->id_barang,
+                            'harga_modal' => $detail->harga_modal,
+                            'harga_jual' => $detail->harga_jual,
+                            'quantity' => $detail->quantity,
+                            'id_pembelian' => $id_pembelian
+                        )
+                    );
+                }
+                $update_detail_pembelian = $this->pembelian->bulk_insert($final_data);
+                if ($update_detail_pembelian) {
+                    $respon['status'] = true;
+                    $respon['message'] = "berhasil menambahkan data";
+                    $respon['data'] = $data;
+                    $this->response($respon, 200);
+                } else {
+                    $respon['status'] = false;
+                    $respon['message'] = "gagal menambahkan data detail";
+                    $respon['data'] = $data;
+                    $this->response($respon, 500);
+                }
+            }else{
                 $respon['status'] = false;
-                $respon['message'] = "gagal menambahkan data detail";
+                $respon['message'] = "Gagal merubah detail pembelian";
                 $respon['data'] = $data;
                 $this->response($respon, 500);
             }
+           
         } else {
             $respon['status'] = false;
             $respon['message'] = "gagal mengubah data";
