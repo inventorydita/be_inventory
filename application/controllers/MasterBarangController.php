@@ -136,4 +136,18 @@ class MasterBarangController extends REST_Controller
         $respon['data'] = $data->result();
         $this->response($respon, 200);
     }
+
+    /* function index()
+    {
+        $b['data'] = $this->barang_model->tampil_barang();
+        $this->load->view('view_tampil',$b);
+       } */
+
+    function count_get()
+    {
+        $respon['status'] = true;
+        $respon['message'] = "berhasil mengambil data";
+        $respon['data'] = $this->Barang_model->count_get();
+        $this->response($respon, 200);
+    }
 }
