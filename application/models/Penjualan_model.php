@@ -23,6 +23,21 @@ class Penjualan_model extends CI_Model
         return $data;
     }
 
+    function get_detail_pembelian($id)
+    {
+        $this->db->select('*');
+        $this->db->from('detail_penjualan');
+        $this->db->join('penjualan','penjualan.id_penjualan = detail_penjualan.id_penjualan');
+        $this->db->join('master_barang', 'master_barang.id_barang = detail_penjualan.id_barang');
+        $this->db->where('penjualan.id_penjualan',$id);
+        $data = $this->db->get();
+        return $data;
+    }
+    //menghapus detail penjualan
+    function delete_detail_penjualan($id_penjualan){
+        return $this->db->delete('detail_penjualan', array('id_penjualan' => $id_penjualan));
+    }
+
     //untuk menampilkan data berdasarkan id
     function get_by_id($id)
     {
