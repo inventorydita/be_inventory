@@ -102,18 +102,25 @@ class PenjualanController extends REST_Controller
         $nomor_nota = $request->nomor_nota;
         $subtotal = $request->subtotal;
         $detail_penjualan = $request->detail_penjualan;
-
         $id_penjualan = $request->id_penjualan;
         $tanggal = date("Y-m-d H:i:s");
 
+        //siapkan data penjualan yang akan diupdate
         $data = array(
             'nomor_nota'   => $nomor_nota,
             'subtotal'     => $subtotal,
             'tanggal'      => $tanggal,
             'id_penjualan' => $id_penjualan
         );
+        //proses update
         $put = $this->penjualan->put($data, $id_penjualan);
+
+        //jika update penjualan berhasil maka lanjut update detail penjualan
         if ($put) {
+
+            $delete_detail_penjualan = $this->penjualan->delete_detail_penjualan($id_penjualan);
+            if($delete_detail_penjualan){
+
             $final_data = [];
             //masukkan masing-masing data ke object untuk ke database
             foreach ($detail_penjualan as $detail) {
@@ -139,12 +146,18 @@ class PenjualanController extends REST_Controller
                 $respon['data'] = $data;
                 $this->response($respon, 500);
             }
-        } else {
+        }else {
             $respon['status'] = false;
-            $respon['message'] = "gagal mengubah data";
+            $respon['message'] = "gagal mengubah data penjualan";
             $respon['data'] = $data;
             $this->response($respon, 500);
         }
+    } else {
+        $respon['statis'] = false;
+        $respon['message'] = "gagal mengubah data";
+        $respon['data'] = $data;
+        $this->response($respon, 500);
+    }
     }
 
     //menghapus salah satu data penjualan
@@ -164,19 +177,7 @@ class PenjualanController extends REST_Controller
             $respon['data'] = $delete;
             $this->response($respon, 500);
         }
-        /* $id = $this->delete('id_detail_penjualan');
-        $delete = $this->detail_penjualan->delete($id);
-        if ($delete) {
-            $respon['status'] = true;
-            $respon['message'] = "berhasil menghapus data";
-            $respon['data'] = $delete;
-            $this->response($respon, 200);
-        } else {
-            $respon['status'] = false;
-            $respon['message'] = "gagal menghapus data";
-            $respon['data'] = $delete;
-            $this->response($respon, 500);
-        } */
+      
     }
 
 

@@ -89,4 +89,11 @@ class Barang_model extends CI_Model
         $data = $this->db->get();
         return $data;
     }
+
+    function count_get()
+    {
+        $sql = "SELECT *, COUNT(id_barang) FROM master_barang";
+        $result = $this->db->query($sql);
+        return $result;
+    }
 }

@@ -114,7 +114,7 @@ class PembelianController extends REST_Controller
         $id_pembelian = $request->id_pembelian;
         $tanggal =  date("Y-m-d H:i:s");
 
-        //siapkan data pembelian yang akan di update
+        //siapkan data pembelian yang akan diupdate
         $data = array(
             'nomor_nota'   => $nomor_nota,
             'tanggal'      => $tanggal,
@@ -188,20 +188,6 @@ class PembelianController extends REST_Controller
             $respon['data'] = $delete;
             $this->response($respon, 500);
         }
-        /*$id = $this->delete('id_detail_pembelian');
-        $this->db->where('id_detail_pembelian', $id);
-        $delete = $this->detail_pembelian->delete($id);
-        if ($delete) {
-            $respon['status'] = true;
-            $respon['message'] = "berhasil menghapus data";
-            $respon['data'] = $delete;
-            $this->response($respon, 200);
-        } else {
-            $respon['status'] = false;
-            $respon['message'] = "gagal menghapus data";
-            $respon['data'] = $delete;
-            $this->response($respon, 500);
-        }*/
     }
 
 
